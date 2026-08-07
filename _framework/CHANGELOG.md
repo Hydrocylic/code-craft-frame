@@ -131,3 +131,24 @@
 ## 模板文件
 
 <!-- 后续变更在此行之上添加 -->
+
+---
+
+## 2026-08-07 — rule-add: 新增 practice 项目类型（轻量刷题模式）
+
+**类型**: rule-add + template-add + structure
+
+**变更内容**:
+- 新增第四种项目类型 **practice**（练习/刷题），面向高频轻量的单文件日常刷题场景
+- 新增 `project-types/practice/SKELETON.md` — 描述单文件 + 单笔记的轻量模式
+- 新增 `project-types/practice/conversion.md` — practice → reconstruction/product 转换规则
+- 新增 `templates/practice-note.md` — 刷题讨论笔记模板
+- 更新 `project-types/README.md` — 四种类型体系
+- Practice 特征：一题双文件（`.cpp` 三位一体 + `.md` 思路探讨），扁平目录，题号命名
+
+**来源**: cpp-lab LeetCodePractice 轻量化设计实践，回馈至上游框架
+
+**影响范围**:
+- 新练习目录可直接采用 practice 骨架规范
+- 现有扁平 `.cpp` 练习目录可按 conversion.md 逐步迁移
+- 框架项目类型从三种扩展为四种
