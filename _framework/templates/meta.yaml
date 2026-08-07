@@ -1,0 +1,42 @@
+# <project-name> 项目元数据
+
+# ── 模板: _framework/templates/meta.yaml ──
+# 使用方式: 复制到 reference/<name>/meta.yaml、projects/<name>/meta.yaml 或 products/<name>/meta.yaml
+# 按实际情况填写，删除不需要的字段。
+
+project: <project-name>       # 必填：项目名称
+type: reconstruction          # reference | reconstruction | product
+status: planned               # planned | in-progress | completed | archived
+created: YYYY-MM-DD           # 必填
+updated: YYYY-MM-DD           # 必填
+
+description: >
+  简要描述项目目标和学习范围。
+  多行用缩进续接。
+
+refs:                         # 参考项目列表
+  - reference/<name>           #   主要参考
+  # - reference/<other>        #   次要参考（可选）
+
+rounds:                       # 轮次索引（reconstruction 类型；随着推进逐步添加）
+  # - r01-<title>
+  # - r02-<title>
+
+resume: resume/resume.md      # 简历描述文件位置
+
+# 可选字段:
+# tags: [<domain-1>, <domain-2>]   # 领域标签
+# prerequisites:               # 前置知识要求
+#   - <concept>
+
+# ── reference 类型额外字段:
+# source:                       # 参考源码信息
+#   url: <原始URL或"manual">
+#   license: <许可证>
+#   language: <编程语言>
+#   lines: <大约行数>
+# notes:                        # 分析笔记索引
+#   - notes/overview.md
+
+# ── product 类型额外字段:
+# derived_from: projects/<name> # 如果从 reconstruction 转换而来

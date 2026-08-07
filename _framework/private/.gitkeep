@@ -1,0 +1,7 @@
+# 私有文件目录
+
+个人行为偏好、学习风格、常见错误记录。
+gitignored — 不纳入版本控制。
+验证过的通用规则 → 提升到 FRAMEWORK.md。
+
+详细模板见: private/learner-profile.md（需自行创建）
