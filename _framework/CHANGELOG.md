@@ -159,6 +159,25 @@
 
 ---
 
+## 2026-08-08 — rule-add: 数学公式必须使用 LaTeX 语法
+
+**类型**: rule-add + spec-update
+
+**变更内容**:
+- 新增 `_framework/notes/spec/template-spec.md` §数学公式书写规范
+- 所有笔记中的数学讨论必须使用 `$...$`（行内）和 `$$...$$`（独立公式）
+- 矩阵、求和、多行推导等数学结构使用标准 LaTeX 环境（`pmatrix`, `aligned` 等）
+- 禁止 ASCII 艺术拼接矩阵、禁止纯文本代码块写数学公式
+- 适用范围：所有项目类型（practice / reference / reconstruction / product）
+
+**来源**: cpp-lab LeetCodePractice/70.md 的数学内容整理实践
+
+**影响范围**:
+- 新笔记直接适用 LaTeX 规范
+- 已有笔记中的 ASCII 数学图示可逐步迁移为 LaTeX
+
+---
+
 ## 2026-08-07 — rule-add: 新增 practice 项目类型（轻量刷题模式）
 
 **类型**: rule-add + template-add + structure
