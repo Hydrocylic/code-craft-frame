@@ -17,16 +17,16 @@
 
 **转换步骤**（以下为 Phase 4 执行阶段的指引；Phase 1-2 的审计和方案必须先完成）：
 
-1. **确认知识边界** — 从 `notes/` 中梳理已分析的知识点，确定课程轮次规划
+1. **确认知识边界** — 梳理参考代码中已理解的知识点，确定课程轮次规划
 2. **创建项目骨架** — 在 `projects/<name>/` 按 reconstruction SKELETON 创建目录
 3. **填充 refs** — 在 `meta.yaml` 的 `refs` 中指向原参考项目
-4. **设计首轮** — 从分析笔记中选择最有代表性的入口点，创建 `r01-<title>/`
-5. **编写 code-refs** — 将 notes 中的代码引用映射为 `code-refs.md` 格式
+4. **设计首轮** — 选择最有代表性的入口点，创建 `r01-<title>/`
+5. **编写 code-refs** — 在 reconstruction 的 `code-refs.md` 中建立代码引用映射
 6. **保留原参考** — reference 项目不删除，作为"标准答案"继续引用
 
 **注意事项**:
 - 不复制参考代码到 reconstruction 的 src/ — 自己写
-- 原参考项目的 notes/ 可以继续更新（新发现），但主体笔记转移到 reconstruction 的 curriculum/
+- 分析笔记全程在 reconstruction 项目的 curriculum/ 中，不在 reference/ 中
 - Agent 辅助时：提供 `--from reference/<name> --to projects/<name>` 参数
 
 ---

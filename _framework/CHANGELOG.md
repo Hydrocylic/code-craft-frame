@@ -128,6 +128,31 @@
 
 ---
 
+---
+
+## 2026-08-08 — rule-change: 参考项目不再包含 notes/ 目录
+
+**类型**: rule-change + structure
+
+**变更内容**:
+- reference 类型项目移除 `notes/` 目录。分析笔记归属到 reconstruction 项目的 curriculum 中，通过 `code-refs.md` 建立映射
+- FRAMEWORK.md §二 目录结构中 reference 移除 notes/
+- FRAMEWORK.md §三 reference 特征描述更新：从"笔记在项目内"改为"不含 notes/"
+- FRAMEWORK.md §三 类型对比表更新：reference 笔记系统为"无"
+- reference SKELETON.md 完全重写 — 移除 notes/，新增"如何使用参考项目"指引
+- reference conversion.md 更新 — 移除所有"从 notes/ 迁移"相关描述
+- MANUAL.md 创建参考项目步骤更新 — 不创建 notes/，不复制 concept-note.md
+- 新增 RESOURCES.md 作为 reference 的可选组件，记录外部资源获取方式
+
+**影响范围**:
+- 现有 reference/ 项目如有 notes/：建议将笔记内容迁移到对应的 reconstruction 项目 curriculum 中，或提升为跨项目概念笔记放入 notes/concepts/
+- 新 reference 项目直接使用新骨架
+- meta.yaml 的 `notes:` 字段对 reference 类型不再适用
+
+**来源**: ai-lab 工作区结构调整反馈
+
+---
+
 ## 模板文件
 
 <!-- 后续变更在此行之上添加 -->

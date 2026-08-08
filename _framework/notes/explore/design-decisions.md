@@ -108,3 +108,24 @@
 - agent 在面对结构调整指令时，默认行为从"执行"变为"出报告"
 - 批量内容生成（如一次创建所有轮次的 notes.md）被明确禁止
 - 用户始终保留对结构和内容两方面的最终决定权
+
+---
+
+## 决策 7: 参考项目不包含笔记
+
+**日期**: 2026-08-08
+
+**背景**: v2.0 的 reference SKELETON 包含 `notes/` 目录，用于存放对参考源码的分析笔记。在 ai-lab 工作区结构调整实践中发现：分析笔记天然服务于"拆解学习"这个动作，归属到 reconstruction 项目的 curriculum 中更自然。而在 reference 中维护 notes/ 导致同一份代码的笔记可能分散在 reference 和 projects 两处。
+
+**决策**: reference 类型不再包含 `notes/` 目录。目录极简化为：源码 + README.md + meta.yaml + (可选) RESOURCES.md。
+
+**理由**:
+- 分析笔记服务于"拆解学习"，属于 reconstruction 项目，通过 `code-refs.md` 建立代码映射
+- reference 保持源码级纯净，可被多个 reconstruction 项目复用，避免笔记冲突
+- 减少跨目录维护负担
+
+**影响**:
+- reference SKELETON.md 重写，不再包含 notes/
+- meta.yaml 的 `notes:` 字段对 reference 类型不再适用
+- MANUAL.md 创建 reference 步骤简化
+- 现有 reference 的 notes/ 可迁移到对应 reconstruction 项目的 curriculum 中

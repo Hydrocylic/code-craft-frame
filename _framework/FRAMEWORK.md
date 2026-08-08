@@ -79,8 +79,9 @@ Phase 3: 确认（等待用户）    Phase 4: 执行（按需操作）
 │   └── <name>/                   #   type: reference
 │       ├── README.md
 │       ├── meta.yaml
-│       ├── notes/                #   分析笔记（架构分析、关键实现解读）
 │       └── <source>/             #   参考源码（不动）
+│
+│   ★ 参考项目不含 notes/。分析笔记归属到 reconstruction 项目的 curriculum 中。
 │
 ├── projects/                     # 复制项目（拆解重构）
 │   └── <project-name>/           #   type: reconstruction
@@ -206,13 +207,13 @@ reference（只读分析）──→ reconstruction（拆解重构）──→ p
 
 > 位置：`reference/` | type: `reference`
 
-**定义**：源码保持原样不动，只读分析。最多部署运行以验证理解。
+**定义**：源码保持原样不动，只读参考。不包含分析笔记——笔记属于 reconstruction 项目的 curriculum。
 
 **特征**：
 - 源码不可修改（IMMUTABLE）
-- 分析笔记在项目内 `notes/`，自包含
-- 笔记聚焦于架构分析、关键实现解读
-- 无 curriculum 轮次、无 experiments、无独立 src/
+- 目录极简：仅源码 + README.md + meta.yaml + RESOURCES.md
+- 分析笔记归属到 reconstruction 项目的 curriculum 中，通过 `code-refs.md` 映射到本目录
+- 无 notes/、无 curriculum、无 experiments、无独立 src/
 
 **创建时机**：获取了值得深入阅读的优秀源码，希望系统性分析其设计。
 
@@ -260,8 +261,8 @@ reference（只读分析）──→ reconstruction（拆解重构）──→ p
 |------|-----------|---------------|---------|
 | 主导力 | 源码驱动（只读） | 参考驱动（拆解） | 需求驱动（构建） |
 | 代码 | 参考源码（不动） | src/ + experiments/ | 统一 src/ |
-| 笔记系统 | notes/（分析笔记） | curriculum/（课程轮次） | docs/ + notes/iterations/ |
-| 简历 | 可选 | 侧重"掌握了 X" | 侧重"从零构建了 Y" |
+| 笔记系统 | 无（笔记在 reconstruction 中） | curriculum/（课程轮次） | docs/ + notes/iterations/ |
+| 简历 | 可选（无独立 resume/） | 侧重"掌握了 X" | 侧重"从零构建了 Y" |
 | 构建 | 参考项目的构建 | 项目级构建，实验共用 | 面向用户的构建 |
 | 转换方向 | → reconstruction / product | → product | → reconstruction（自举） |
 
@@ -384,7 +385,7 @@ experiments/<experiment-name>/
 
 每个项目完成后，撰写简历项目描述。这是**项目完成的收尾标志**。
 
-- **参考项目**: 可选，`reference/<name>/resume/`（如有）
+- **参考项目**: 无独立 resume/，关键收获汇入对应的 reconstruction 项目简历
 - **复制项目**: `projects/<name>/resume/resume.md`
 - **产出项目**: `products/<name>/resume/resume.md`
 

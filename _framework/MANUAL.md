@@ -120,13 +120,13 @@ git submodule add <url> reference/<project-name>
 
 ## 创建参考项目（阅读）
 
-参考项目用于只读分析。源码保持原样，笔记记录对代码的理解。
+参考项目用于只读参考。源码保持原样，分析笔记放在 reconstruction 项目的 curriculum 中。
 
 ### 步骤
 
 ```bash
 # 1. 创建项目目录
-mkdir -p reference/<project-name>/notes
+mkdir -p reference/<project-name>
 
 # 2. 放置或克隆参考源码到项目目录（手动操作）
 #    - 下载的源码 → reference/<project-name>/<source>/
@@ -139,9 +139,11 @@ cp _framework/templates/meta.yaml reference/<project-name>/meta.yaml
 # 4. 创建 README.md
 #   记录来源、获取方式、内容概述
 
-# 5. 创建首篇分析笔记
-cp _framework/templates/concept-note.md reference/<project-name>/notes/overview.md
+# 5. （可选）创建 RESOURCES.md
+#   记录外部资源（数据集、权重等）的获取方式
 ```
+
+> **注意**: reference 项目**不创建 notes/ 目录**。对参考代码的分析解读归属到 `projects/<name>/curriculum/` 中，通过 `code-refs.md` 建立源码映射。
 
 详细骨架见 `_framework/project-types/reference/SKELETON.md`。
 
