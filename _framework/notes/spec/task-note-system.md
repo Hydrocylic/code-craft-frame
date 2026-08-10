@@ -1,0 +1,213 @@
+# 任务笔记系统规范
+
+> 区域: spec（规范区）
+> 框架版本: v2.1
+> 创建: 2026-08-10
+> 来源: virtual-human 项目实践反馈
+
+---
+
+## 适用范围
+
+| 项目类型 | 适用程度 |
+|----------|----------|
+| **product** | ★ 强制 — 任务三元组 + issues.md + knowledge-base.md 为标配 |
+| **reconstruction** | 推荐 — 课程轮次可沿用 curriculum 体系，但复杂轮次建议采用 plan→log→code-review 模式 |
+| **reference** | 不适用 — 只读项目无执行任务 |
+| **practice** | 不适用 — 轻量模式，笔记即日志 |
+
+---
+
+## 一、设计原则
+
+1. **笔记为主体** — 任务笔记（plan + log + code-review）是日常工作的核心载体，其他文件为支撑
+2. **粗糙记录优先** — 先记下来，后续再整理。不过早追求完美分类
+3. **减少层级** — `tasks/` 下不建子目录，用命名区分（`任务名-类型.md`）
+4. **计划与执行结对** — 同一任务的计划、日志、品读用相同前缀，放在同一目录
+5. **Bug 不独立** — Bug 是执行过程的有机部分，记录在执行日志的时间线中
+6. **日志持续追加** — 每次对话结束后追加时间戳条目，不覆盖历史
+
+---
+
+## 二、目录结构
+
+```
+docs/
+├── README.md                                ← 文档系统自身的结构设计 + 使用规则（推荐）
+│
+├── overview/                                ← 宏观架构（给外部人员介绍项目用）
+│   ├── project-intro.md                     ← 项目定位、技术栈、功能边界、资源清单
+│   ├── milestones.md                        ← 里程碑 + 各阶段任务清单
+│   └── structure-changes.md                 ← 历次结构调整记录
+│
+├── tasks/                                   ← ★ 任务执行单元（日常工作主战场）
+│   ├── {task-name}-plan.md                  ← 任务计划（要做什么 + 设计调研）
+│   ├── {task-name}-log.md                   ← 执行日志（实际做了什么 + Bug/踩坑）
+│   └── {task-name}-code-review.md           ← 代码品读（对产出代码的复盘质询）
+│
+├── issues.md                                ← 非主线问题追踪
+├── knowledge-base.md                        ← 基础知识补全（product 项目推荐使用）
+└── decisions.md                             ← 技术选型记录（ADR 风格）
+```
+
+> **与旧版 docs/ 的对应关系**：`overview/project-intro.md` 吸收原 `architecture.md` 的定位描述；`overview/milestones.md` 替代原 `changelog.md` 的版本视角；`decisions.md` 等价于原 `design-decisions.md`。原三文件内容可重新分布到新结构中，不必严格一对一迁移。
+
+---
+
+## 三、任务三元组
+
+### 3.1 任务计划（`tasks/{name}-plan.md`）
+
+**何时创建**：接到新任务时，先写计划，再动手。
+
+**内容**：
+- 目标、数据流、设计决策
+- 附录：相关的技术调研、参考材料、API 速查
+
+**规则**：
+- 标注状态：⬜ 待开始 / 🔄 进行中 / ✅ 已完成
+- 头部关联执行日志和代码品读
+- 完成后不删除，保留为历史记录
+
+**模板**：见 `_framework/templates/task-plan.md`
+
+### 3.2 执行日志（`tasks/{name}-log.md`）
+
+**何时追加**：每次执行操作后（环境搭建、代码编写、Bug 修复、联调验证）。**每次对话结束后必须追加**。
+
+**内容**：
+- 时间戳条目：做了什么、关键决策、产生文件、下一步
+- Bug 记录（内嵌在时间线中）
+- 对话中没有实质操作时也要更新状态
+
+**规则**：
+- 单文件持续追加，不覆盖历史
+- 时间戳格式：`## 📝 [YYYY-MM-DD HH:MM] — 标题`
+- Bug 格式：`## 🐛 BUG-XXX — 标题`，含现象/原因/修复/验证
+- 计划描述"要做什么"，日志记录"实际做了什么"
+
+**模板**：见 `_framework/templates/task-log.md`
+
+### 3.3 代码品读（`tasks/{name}-code-review.md`）
+
+**何时创建**：任务产出代码后，对代码进行复盘质询。
+
+**内容**：
+- 产出文件清单
+- 逐文件分析：实际做了什么、用了什么模式、可改进点
+- 整体架构观察：数据流路径、耦合点、缺失部分
+- **末尾设"发现的知识盲区"段落** — 待后续整理到 knowledge-base.md
+
+**规则**：
+- 品读粒度：按任务（不是按文件/子步骤）
+- 知识盲区先在末尾记录，积累后整理到 knowledge-base.md
+- 品读不是一次性完成的 — 后续回顾时可以追加新的观察
+- **品读中发现的每一项内容标注 T1–T7 类型标记**，详见 `_framework/notes/spec/code-review-classification.md`
+
+---
+
+## 四、支撑文件
+
+### 4.1 issues.md（product 标配）
+
+执行中发现但不在当前任务范围内的非主线问题。
+
+**格式**：
+- 🔴 高 / 🟡 中 / 🟢 低 优先级标记
+- IS-XXX 三位数字编号
+- 按优先级分区排列
+
+**何时使用**：
+- 品读中发现的 T3 性能优化想法、T5 可执行改进（跨任务时）、T6 验证待办
+- 执行中发现的独立功能需求或技术债务
+- 不用于：当前任务内的 TODO（留在 plan/log 中）
+
+### 4.2 knowledge-base.md（product 推荐）
+
+基础知识补全，QA 格式。**单体文件，不按主题拆分**。
+
+> **注意**：knowledge-base.md 的单体不拆分策略是 product 项目的推荐做法，不适用于所有项目类型。reconstruction 项目的知识积累应通过轮次 QA（`curriculum/r<NN>-<title>/qa.md`）进行，每个轮次的知识就近记录。
+
+**何时使用**：
+- 品读中发现的知识盲区（T1 迁移、T4 技术路标）
+- 执行中学习到的底层原理
+
+**格式**：
+```markdown
+### QXX — 问题标题
+
+**Q**: 问题描述
+**A**: 答案
+**日期**: YYYY-MM-DD
+**来源**: <品读文件路径 / 任务名>
+```
+
+### 4.3 decisions.md
+
+技术选型记录，ADR 风格。等价于原 `docs/design-decisions.md`。
+
+---
+
+## 五、工作流
+
+```
+1. 接到新任务
+   → 创建 tasks/{name}-plan.md（计划 + 设计调研）
+   → 更新 overview/milestones.md（如涉及里程碑）
+
+2. 执行过程中
+   → 每次操作后追加 tasks/{name}-log.md（时间戳条目）
+   → 遇到 Bug 直接记在 log.md 时间线中（🐛 格式）
+   → 发现非主线问题 → 追加到 issues.md
+
+3. 任务产出代码后
+   → 创建 tasks/{name}-code-review.md（代码品读，标注 T1–T7）
+   → 发现的知识盲区记在末尾
+
+4. 定期整理（触发条件：用户指令 或 品读文件某类条目积累到可批量处理）
+   → T1 语法/文档问题 → Agent 按区域 + 时间戳批量迁移到 knowledge-base.md（QA 条目）
+   → T3 性能想法 → 抄送 issues.md 🟢 区
+   → T4 技术路标 → knowledge-base.md "待深入"条目
+   → T6 验证待办 → issues.md（集中评估价值后再决定是否排入任务 plan）
+   → 决策性内容 → 补充到 decisions.md
+   → T5 可执行改进被排期时 → 创建新 tasks/{name}-plan.md
+```
+
+---
+
+## 六、交叉引用约定
+
+```
+plan ←→ log：          互相引用（头部关联链接）
+log  → issues：        "→ [issues.md](../issues.md) IS-XXX"
+code-review → log：    "见 [log.md](log.md) BUG-XXX"
+code-review → knowledge："待整理到 [knowledge-base.md](../knowledge-base.md)"
+```
+
+---
+
+## 七、格式约定
+
+| 元素 | 格式 |
+|------|------|
+| 时间戳条目 | `## 📝 [YYYY-MM-DD HH:MM] — 标题` |
+| Bug 条目 | `## 🐛 BUG-XXX — 标题`，含现象/原因/修复/验证 |
+| 变更标注 | `> **📝 [YYYY-MM-DD]** — 变更说明` |
+| 状态标记 | ✅ 完成 / 🔄 进行中 / ⬜ 待开始 |
+| Issue 优先级 | 🔴 高 / 🟡 中 / 🟢 低 |
+| Issue 编号 | IS-XXX（三位数字） |
+| Bug 编号 | BUG-XXX（三位数字） |
+| 文件命名 | 英文 kebab-case（如 `minimal-pipeline-plan.md`） |
+| 文件内标题 | 中文 |
+
+---
+
+## 八、Agent 行为指引
+
+在使用 Agent（如 Claude Code）辅助任务执行时：
+
+1. **规划先于执行** — Agent 收到任务后先将执行计划写入对应 `tasks/{name}-plan.md`，征求确认后再动手
+2. **日志持续追加** — 每次对话结束后必须追加 `tasks/{name}-log.md` 时间戳条目
+3. **品读按任务进行** — 任务产出代码后，创建 `tasks/{name}-code-review.md`，逐文件分析并标注 T1–T7
+4. **问题分流** — 执行中发现的非主线问题追加到 `issues.md`，不在对话中直接判断"该怎么做"
+5. **不主动执行指令** — 命令行操作写入笔记/操作记录文件，标注"待用户执行"。仅在用户明确授权后才代为操作

@@ -28,6 +28,8 @@
 | 8 | `daily-note.md` | notes/daily/YYYY-MM-DD.md |
 | 9 | `resume-project.md` | resume/resume.md |
 | 10 | `CLAUDE.md` | 仓库根目录 CLAUDE.md |
+| 11 | `task-plan.md` | docs/tasks/{name}-plan.md（product 项目标配，reconstruction 推荐） |
+| 12 | `task-log.md` | docs/tasks/{name}-log.md（product 项目标配，reconstruction 推荐） |
 
 ## 模板元要求
 

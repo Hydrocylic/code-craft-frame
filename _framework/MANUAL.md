@@ -210,17 +210,23 @@ resume: resume/resume.md
 
 ```bash
 # 1. 创建产品骨架
-mkdir -p products/<product-name>/{src/include,docs,resume,notes/iterations,notes/concepts}
+mkdir -p products/<product-name>/{src/include,docs/overview,docs/tasks,resume,notes/iterations,notes/concepts}
 
 # 2. 创建 meta.yaml（type: product）
 cp _framework/templates/meta.yaml products/<product-name>/meta.yaml
 
-# 3. 创建架构文档
-touch products/<product-name>/docs/architecture.md
-touch products/<product-name>/docs/changelog.md
-touch products/<product-name>/docs/design-decisions.md
+# 3. 创建文档系统骨架
+touch products/<product-name>/docs/overview/project-intro.md
+touch products/<product-name>/docs/overview/milestones.md
+touch products/<product-name>/docs/overview/structure-changes.md
+touch products/<product-name>/docs/issues.md
+touch products/<product-name>/docs/decisions.md
 
-# 4. 创建简历占位
+# 4. （推荐）创建 docs/README.md 和 knowledge-base.md
+# docs/README.md 描述文档系统自身的结构和使用规则
+# knowledge-base.md 用于 QA 格式的基础知识补全（单体文件，不按主题拆分）
+
+# 5. 创建简历占位
 cp _framework/templates/resume-project.md products/<product-name>/resume/resume.md
 ```
 

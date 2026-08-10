@@ -107,10 +107,19 @@ Phase 3: 确认（等待用户）    Phase 4: 执行（按需操作）
 │       ├── README.md
 │       ├── meta.yaml
 │       ├── src/                  #   ★ 产品源码（统一结构）
-│       ├── docs/                 #   架构文档 + 变更记录
-│       │   ├── architecture.md
-│       │   ├── changelog.md
-│       │   └── design-decisions.md
+│       ├── docs/                 #   ★ 任务笔记系统（日常主战场）
+│       │   ├── README.md         #     文档系统自身说明（推荐）
+│       │   ├── overview/         #     宏观架构
+│       │   │   ├── project-intro.md
+│       │   │   ├── milestones.md
+│       │   │   └── structure-changes.md
+│       │   ├── tasks/            #     ★ 任务三元组 (plan─log─code-review)
+│       │   │   ├── {name}-plan.md
+│       │   │   ├── {name}-log.md
+│       │   │   └── {name}-code-review.md
+│       │   ├── issues.md         #     非主线问题追踪
+│       │   ├── knowledge-base.md #     基础知识补全（推荐）
+│       │   └── decisions.md      #     技术选型记录
 │       ├── resume/
 │       └── notes/                #   迭代记录 & 概念笔记
 │

@@ -77,6 +77,17 @@
 - 参考项目的复杂度（大型项目需要更多轮次）
 - 实验的独立程度（能独立跑的轮次通常更适合）
 
+### 10. knowledge-base.md 的使用范围
+
+**标准**: product 项目推荐使用 `docs/knowledge-base.md`（单体 QA 文件，不按主题拆分）进行基础知识积累。
+
+**可调整**: reconstruction 项目的知识积累应通过轮次 QA（`curriculum/r<NN>-<title>/qa.md`）进行，每个轮次的知识就近记录，而非集中到一个全局 knowledge-base 文件。原因：
+- reconstruction 以轮次为独立的课程单元，知识天然属于产生它的轮次
+- 轮次 QA 的"未解决问题"机制已经提供了跨轮次的知识流转
+- 集中式 knowledge-base 更适合 product 这种"持续建造"的场景，不太适合 reconstruction 的"阶段式学习"
+
+如果一个 reconstruction 项目后期转为 product，可在转换时将各轮次 QA 中的知识点提炼合并到 knowledge-base.md。
+
 ---
 
 ## 模板层面

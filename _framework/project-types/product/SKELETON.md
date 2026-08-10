@@ -32,10 +32,19 @@ products/<name>/
 ├── shaders/                     # 着色器（图形学项目适用）
 ├── resources/                   # 资产（可提交或 gitignored，视大小而定）
 
-├── docs/                        # ★ 架构文档 + 重构记录
-│   ├── architecture.md          #   整体架构设计
-│   ├── changelog.md             #   轻量级变更日志（版本迭代记录）
-│   └── design-decisions.md      #   关键设计决策 & 权衡
+├── docs/                        # ★ 任务笔记系统（日常主战场）
+│   ├── README.md                #   文档系统自身的结构设计 + 使用规则（推荐）
+│   ├── overview/                #   宏观架构（给外部人员介绍项目用）
+│   │   ├── project-intro.md     #     项目定位、技术栈、功能边界
+│   │   ├── milestones.md        #     里程碑 + 各阶段任务清单
+│   │   └── structure-changes.md #     历次结构调整记录
+│   ├── tasks/                   #   ★ 任务执行单元
+│   │   ├── {name}-plan.md       #     任务计划（要做什么 + 设计调研）
+│   │   ├── {name}-log.md        #     执行日志（实际做了什么 + Bug）
+│   │   └── {name}-code-review.md #    代码品读（复盘质询，标注 T1–T7）
+│   ├── issues.md                #   非主线问题追踪（IS-XXX 编号）
+│   ├── knowledge-base.md        #   基础知识补全（推荐，QA 格式，单体不拆分）
+│   └── decisions.md             #   技术选型记录（ADR 风格）
 
 ├── tests/                       # 测试（可选）
 
@@ -44,7 +53,7 @@ products/<name>/
 ├── resume/                      # 简历描述
 │   └── resume.md
 
-└── notes/                       # 笔记系统
+└── notes/                       # 笔记系统（长期积累）
     ├── iterations/              #   重构迭代记录（保留历史代码版本）
     │   └── v<NN>-<title>.md     #   每次重构的原因、过程、结果
     └── concepts/                #   核心技术概念笔记
@@ -57,17 +66,50 @@ products/<name>/
 | 维度 | reconstruction | product |
 |------|---------------|---------|
 | 目标 | 理解结构 | 产出产品 |
-| 轮次 | curriculum/ 驱动 | docs/changelog.md 驱动 |
+| 工作单元 | curriculum/ 轮次驱动 | tasks/ 任务三元组驱动 (plan→log→code-review) |
 | 代码组织 | 分散在 experiments/ | 统一在 src/ |
 | 质量要求 | 跑通即可 | 产品级，含测试和文档 |
 | 展示性 | 不对外的学习笔记 | 面向用户的清晰文档 |
-| 笔记 | 课程轮次 notes + QA | 迭代记录 + 架构文档 |
+| 笔记 | 课程轮次 notes + QA | 任务笔记 + issues + knowledge-base |
+| 问题追踪 | 轮次内 qa.md 未解决问题 | issues.md（IS-XXX + 优先级） |
+
+---
+
+## 任务笔记系统
+
+Product 项目的日常工作围绕 `docs/tasks/` 中的**任务三元组**展开：
+
+```
+tasks/{name}-plan.md          ← 任务计划（要做什么 + 设计调研）
+tasks/{name}-log.md           ← 执行日志（实际做了什么 + Bug 踩坑）
+tasks/{name}-code-review.md   ← 代码品读（复盘质询，标注 T1–T7 分类）
+```
+
+详细规范见 `_framework/notes/spec/task-note-system.md`，分类体系见 `_framework/notes/spec/code-review-classification.md`。
+
+### 配套支撑文件
+
+| 文件 | 用途 | 强制性 |
+|------|------|--------|
+| `docs/issues.md` | 非主线问题追踪（IS-XXX + 🔴🟡🟢 优先级） | ★ 标配 |
+| `docs/knowledge-base.md` | 基础知识补全（QA 格式，单体不拆分） | 推荐 |
+| `docs/decisions.md` | 技术选型记录（ADR 风格） | 推荐 |
+| `docs/README.md` | 文档系统自身的结构设计 + 使用规则 | 推荐 |
+
+### 工作流
+
+```
+接到任务 → tasks/{name}-plan.md
+执行中   → tasks/{name}-log.md（每次对话追加）
+产出代码 → tasks/{name}-code-review.md（T1–T7 分类）
+定期整理 → T1→knowledge-base / T3,T5,T6→issues / 决策→decisions
+```
 
 ---
 
 ## 重构迭代记录规范
 
-`notes/iterations/v<NN>-<title>.md` 记录每次重大重构：
+`notes/iterations/v<NN>-<title>.md` 记录每次重大重构（与 tasks/ 互补——tasks/ 记录日常，iterations/ 记录阶段性架构变更）：
 
 ```markdown
 # v01 — <重构标题>
@@ -96,9 +138,9 @@ products/<name>/
 
 ## 代码整洁 vs 笔记丰富
 
-产出项目面向展示，源代码区（`src/`、`docs/`）保持整洁；详细的迭代思考记录在 `notes/`。
+产出项目面向展示，源代码区（`src/`）保持整洁；详细的迭代思考和任务记录在 `docs/` 和 `notes/`。
 
-如果你希望代码仓库完全纯净（例如作为独立开源项目发布），可将 `notes/` 中的迭代记录外置到全局 `notes/products/<name>/`，使产品目录仅保留代码和核心文档。
+如果你希望代码仓库完全纯净（例如作为独立开源项目发布），可将 `docs/tasks/` 和 `notes/` 中的详细记录外置到全局 `notes/products/<name>/`，使产品目录仅保留代码和核心文档。
 
 ---
 

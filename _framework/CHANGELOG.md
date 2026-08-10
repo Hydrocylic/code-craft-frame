@@ -5,6 +5,60 @@
 
 ---
 
+## 2026-08-10 — v2.1: product 项目任务笔记系统 + 代码品读分类体系
+
+**类型**: rule-add + template-add + spec-add + structure
+
+**变更内容**:
+
+**1. 新增 spec 规范文档（2 个）**:
+- `notes/spec/task-note-system.md` — 任务三元组规范（plan→log→code-review），含追加式日志、Bug 内嵌时间线、issues 分流、knowledge-base 管理、定期整理工作流、格式约定、Agent 行为指引
+- `notes/spec/code-review-classification.md` — T1–T7 分类路由表，含各类型详细说明、T1 迁移流程、核心原则
+
+**2. 新增模板（2 个）**:
+- `templates/task-plan.md` — 任务计划模板（目标/数据流/实现设计/附录）
+- `templates/task-log.md` — 执行日志模板（时间戳条目/Bug 格式/产生文件表）
+
+**3. 升级 product SKELETON**:
+- `docs/` 从三文件（architecture/changelog/design-decisions）升级为任务笔记系统结构：
+  - `docs/README.md`（推荐）— 文档系统自身说明
+  - `docs/overview/` — project-intro, milestones, structure-changes
+  - `docs/tasks/` — ★ 任务三元组（plan/log/code-review）
+  - `docs/issues.md`（★ 标配）— IS-XXX + 🔴🟡🟢 优先级
+  - `docs/knowledge-base.md`（推荐）— QA 格式，单体不拆分
+  - `docs/decisions.md`（推荐）— ADR 风格
+- 新增"任务笔记系统"节，描述工作流和配套文件
+- 更新与 reconstruction 的对比表
+- 迭代记录（`notes/iterations/`）保留，与 tasks/ 互补
+
+**4. 更新 FRAMEWORK.md §二**:
+- 同步 product 的 `docs/` 目录结构
+
+**5. 更新 templates/CLAUDE.md**:
+- 新增"项目特定规则"节（9 条）：代码保守/笔记丰富/规划先行/不主动指令/时间戳/日志追加/代码品读 T1–T7/知识粗糙积累/问题分流
+- 保留"结构调整"子节（3 条）
+
+**6. 更新 explore/ 探讨区**:
+- `adjustable-items.md` 新增条目 10：knowledge-base.md 适用范围 — product 推荐使用，reconstruction 用轮次 QA
+
+**7. 更新 spec/ 规范区**:
+- `template-spec.md` 模板完整性表新增 task-plan.md (#11) 和 task-log.md (#12)
+
+**设计原则**:
+- product 项目：任务笔记系统偏强制性（标配 issues.md、强制 tasks/ 三元组、推荐 knowledge-base.md）
+- reconstruction 项目：推荐采用，不强制替代现有 curriculum 体系
+- reference / practice 项目：不适用
+
+**来源**: virtual-human (products/virtual-human) 项目实践反馈至上游框架
+
+**影响范围**:
+- 新 product 项目直接使用新的 docs/ 结构
+- 现有 product 项目的 `docs/architecture.md`、`docs/changelog.md`、`docs/design-decisions.md` 可重新分布到新结构中（architecture→overview/project-intro, changelog→overview/milestones, design-decisions→decisions.md）
+- reconstruction 项目可选升级，无强制迁移要求
+- CLAUDE.md 实例（使用本模板的仓库）建议同步更新"项目特定规则"节
+
+---
+
 ## 2026-08-07 — v2.0: 三版本统一
 
 **类型**: structure + rule-change
