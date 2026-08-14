@@ -5,6 +5,27 @@
 
 ---
 
+## 2026-08-14 — rule-add: product submodule 变体（代码与笔记跨仓库分离）
+
+**类型**: rule-add
+
+**变更内容**:
+- `project-types/product/SKELETON.md` 新增 §Submodule 变体：
+  - submodule 仓库保持纯代码，笔记按 product 骨架镜像到元仓库 `notes/<name>/`
+  - 标准骨架 ↔ submodule 变体的目录映射表
+  - 元仓库侧笔记的目录语义表（overview/tasks/roadmap/issues/questions 的维护方式）
+  - 要点：私有内容不进入公开 submodule；机器相关构建配置（CMakeUserPresets.json）放 submodule 内但 gitignored；第三方二进制资源用打包/拆解脚本管理迁移
+- `MANUAL.md` 创建产出项目节新增 submodule 变体步骤（submodule add + 镜像目录 + 支撑文件）
+
+**来源**: LabNotebook/kotocord 项目实践（C++/Qt product 以 submodule 管理，元仓库笔记分离模式运行稳定后）反馈至上游框架
+
+**影响范围**:
+- 新 submodule 型 product 项目直接采用变体骨架
+- 标准（非 submodule）product 项目不受影响
+- 现有 submodule 型项目可对照映射表自查笔记位置
+
+---
+
 ## 2026-08-13 — template-update: round-notes 增加"实验想法 → 已实验"记录区
 
 **类型**: template-update

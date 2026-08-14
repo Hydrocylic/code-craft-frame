@@ -144,6 +144,56 @@ tasks/{name}-code-review.md   ← 代码品读（复盘质询，标注 T1–T7 �
 
 ---
 
+## Submodule 变体: 代码与笔记跨仓库分离
+
+当产品以 **git submodule** 形式挂载在元仓库 `products/<name>/` 时，submodule 仓库保持纯代码，产品文档与笔记在元仓库 `notes/<name>/` 下按 product 骨架镜像管理：
+
+```
+<meta-repo>/
+├── products/<name>/            ← git submodule — 纯代码（README/LICENSE/src/tests）
+└── notes/<name>/               ← 元仓库内 — 笔记与私有文档
+    ├── README.md               ←   笔记索引
+    ├── docs/
+    │   ├── overview/           ←   宏观参考（构建配置、项目概述、构建速查）
+    │   ├── tasks/              ←   任务三元组（plan─log─code-review）
+    │   ├── roadmap.md          ←   特性路线图（优先级分批次）
+    │   ├── issues.md           ←   非主线问题追踪（IS-XXX + 🔴🟡🟢）
+    │   ├── knowledge-base.md   ←   基础知识补全（QA 格式，推荐）
+    │   └── decisions.md        ←   技术选型记录
+    ├── notes/
+    │   └── questions.md        ←   开放讨论（尚未决策的架构问题）
+    └── resume/                 ←   简历条目、面试 Q&A
+```
+
+### 与标准骨架的映射
+
+| 标准 product 骨架 | submodule 变体 |
+|-------------------|----------------|
+| `products/<name>/docs/` | `notes/<name>/docs/`（元仓库） |
+| `products/<name>/notes/` | `notes/<name>/notes/`（元仓库） |
+| `products/<name>/resume/` | `notes/<name>/resume/`（元仓库） |
+
+### 笔记目录语义
+
+| 目录 | 内容性质 | 维护方式 |
+|------|----------|----------|
+| `docs/overview/` | 长期参考文档 | 随项目演进持续更新 |
+| `docs/tasks/` | 已完成任务的记录 | 归档后只读，plan-log 配对 |
+| `docs/roadmap.md` | 特性规划 | 完成一项划一项 |
+| `docs/issues.md` | 待解决问题的追踪 | 发现→诊断→修复→关闭 |
+| `docs/decisions.md` | 已落地的技术决策 | 决策时追加 |
+| `docs/knowledge-base.md` | 零散知识条目 | QA 格式粗糙积累 |
+| `notes/questions.md` | 开放讨论，未决策 | 决策落地后提炼到 decisions.md |
+| `resume/` | 对外展示材料 | 项目完成后填充 |
+
+### 要点
+
+- submodule 仓库保持纯代码 + 面向使用者的核心文档（README、LICENSE）；私有内容（设计讨论、简历、面试准备）只在元仓库
+- 机器相关的构建配置（如 `CMakeUserPresets.json`）放 submodule 内但 gitignored，避免硬编码路径进入版本库
+- 第三方二进制资源（预编译 DLL、模型文件）体积大不进 git：用 gitignore 排除 + 打包/拆解脚本管理迁移（详见 `notes/explore/` 资源工具链讨论）
+
+---
+
 ## 与其他项目类型的关系
 
 - **reconstruction → product**: 课程完成，整理为产品

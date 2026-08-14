@@ -232,6 +232,26 @@ cp _framework/templates/resume-project.md products/<product-name>/resume/resume.
 
 详细骨架见 `_framework/project-types/product/SKELETON.md`。
 
+### 产出项目 submodule 变体
+
+产品代码在独立 git 仓库时，以 submodule 挂载到 `products/<name>/`（纯代码），笔记按 product 骨架镜像到元仓库 `notes/<name>/`：
+
+```
+# 1. 挂载 submodule (用户执行)
+git submodule add <repo-url> products/<name>
+
+# 2. 在元仓库创建镜像笔记目录
+mkdir -p notes/<name>/{docs/overview,docs/tasks,notes,resume}
+
+# 3. 索引 + 支撑文件
+#    notes/<name>/README.md     — 笔记索引
+#    docs/issues.md             — 标配
+#    docs/decisions.md          — 推荐
+#    docs/knowledge-base.md     — 推荐
+```
+
+设计理由: submodule 仓库保持纯代码，元仓库承载设计讨论、配置审查、简历准备等私有内容。完整规范（映射表 + 目录语义）见 `_framework/project-types/product/SKELETON.md` §Submodule 变体。
+
 ---
 
 ## 项目类型转换
