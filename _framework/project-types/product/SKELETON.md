@@ -31,6 +31,7 @@ products/<name>/
 
 ├── shaders/                     # 着色器（图形学项目适用）
 ├── resources/                   # 资产（可提交或 gitignored，视大小而定）
+├── samples/                     # 代码案例（可选，进 git；与条目/媒体同 slug 对齐，随离线打包交付）
 
 ├── docs/                        # ★ 任务笔记系统（日常主战场）
 │   ├── README.md                #   文档系统自身的结构设计 + 使用规则（推荐）
@@ -191,6 +192,7 @@ tasks/{name}-code-review.md   ← 代码品读（复盘质询，标注 T1–T7 �
 - submodule 仓库保持纯代码 + 面向使用者的核心文档（README、LICENSE）；私有内容（设计讨论、简历、面试准备）只在元仓库
 - 机器相关的构建配置（如 `CMakeUserPresets.json`）放 submodule 内但 gitignored，避免硬编码路径进入版本库
 - 第三方二进制资源（预编译 DLL、模型文件）体积大不进 git：用 gitignore 排除 + 打包/拆解脚本管理迁移（详见 `notes/explore/` 资源工具链讨论）
+- 代码案例（如 `samples/<slug>/`）是文本资产，进 git 随仓库公开：与条目/媒体同 slug 对齐，由打包脚本携带交付；大工程排除生成物只留源码（来源: portfolio-site 决策 D7，2026-08-20）
 
 ---
 

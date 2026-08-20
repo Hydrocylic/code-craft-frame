@@ -5,6 +5,25 @@
 
 ---
 
+## 2026-08-20 — rule-add: product 骨架新增 samples/ 代码案例约定
+
+**类型**: rule-add
+
+**变更内容**:
+- `project-types/product/SKELETON.md` 目录结构新增可选 `samples/`：代码案例（进 git）
+  - 适用内容型产品（条目文档 + 媒体 + 代码案例的交付形态）
+  - 与条目/媒体目录同 slug 三层对齐，靠目录名关联
+  - 由打包脚本随离线产物携带交付
+- submodule 变体「要点」补充：代码案例是文本资产，进 git 随仓库公开；大工程排除生成物只留源码
+
+**来源**: Portfolio/portfolio-site 项目实践（决策 D7，2026-08-20）
+
+**影响范围**:
+- 新内容型 product 项目可选采用
+- 现有项目不强制同步
+
+---
+
 ## 2026-08-14 — rule-add: product submodule 变体（代码与笔记跨仓库分离）
 
 **类型**: rule-add
