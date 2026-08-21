@@ -33,6 +33,7 @@
 - **产出项目**: `products/<name>/` + docs/ + src/ → 见 `_framework/MANUAL.md`
 - **新轮次**: 从 `_framework/templates/` 复制 `round-notes.md`、`qa.md`、`code-refs.md`
 - **新实验**: 从 `_framework/templates/` 复制 `experiment-notes.md`
+- **轮次遗留问题分流**: `notes.md` 中用 `### 待实验` / `### 待解答` 子标题区分，Agent 据此决定是创建实验还是写 QA
 
 ## 项目特定规则
 
