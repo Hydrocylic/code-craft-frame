@@ -435,34 +435,34 @@ rm -rf .git/modules/reference/<project-name>
 
 ---
 
-## 将此仓库作为字库（submodule）纳入其他项目
+## 将此仓库作为子库（submodule）纳入其他项目
 
 ### 场景
 
 本仓库的核心资产是 `_framework/` 目录。其他学习仓库可以：
-1. **复制方式**: `cp -r learn-frame/_framework/ <other-repo>/_framework/`（最简单，但失去与母库的更新关联）
-2. **字库方式**: 将 learn-frame 作为 submodule 引入，然后从其 `_framework/` 中引用模板和规则
+1. **复制方式**: `cp -r code-craft-frame/_framework/ <other-repo>/_framework/`（最简单，但失去与母库的更新关联）
+2. **子库方式**: 将 code-craft-frame 作为 submodule 引入，然后从其 `_framework/` 中引用模板和规则
 
-### 字库（submodule）方式
+### 子库（submodule）方式
 
 ```bash
 # 在目标学习仓库中
 cd <target-repo>
 
 # 1. 添加本库为 submodule（放在隐藏/元目录中）
-git submodule add <learn-frame-url> .meta/framework-source
+git submodule add <code-craft-frame-url> .meta/framework-source
 
-# 2. 在 CLAUDE.md 中指向字库中的框架
+# 2. 在 CLAUDE.md 中指向子库中的框架
 # CLAUDE.md:
 # 框架来源: .meta/framework-source/_framework/
 # 模板路径: .meta/framework-source/_framework/templates/
 
-# 3. 创建新项目时从字库复制模板
+# 3. 创建新项目时从子库复制模板
 cp .meta/framework-source/_framework/templates/meta.yaml projects/<name>/meta.yaml
 cp .meta/framework-source/_framework/templates/CLAUDE.md ./CLAUDE.md
 ```
 
-### 更新字库中的框架
+### 更新子库中的框架
 
 ```bash
 # 当母库中的 _framework/ 有更新时
@@ -474,9 +474,9 @@ git add .meta/framework-source
 git commit -m "meta: update framework-source to <version>"
 ```
 
-### 字库 vs 复制的选择
+### 子库 vs 复制的选择
 
-| 维度 | 复制 _framework/ | submodule 字库 |
+| 维度 | 复制 _framework/ | submodule 子库 |
 |------|-----------------|---------------|
 | 简单度 | ✅ 一步完成 | 需要理解 submodule |
 | 独立性 | ✅ 完全独立，可自行修改 | 修改需在母库中进行 |
@@ -486,7 +486,7 @@ git commit -m "meta: update framework-source to <version>"
 
 **建议**: 
 - 刚起步的学习仓库 → 复制方式，简单直接
-- 多个学习仓库需要同步框架更新 → 字库方式
+- 多个学习仓库需要同步框架更新 → 子库方式
 - 对框架有了自己的修改 → 复制方式（分叉演化）
 
 ### 框架更新检查
@@ -497,7 +497,7 @@ git commit -m "meta: update framework-source to <version>"
 # 查看当前框架版本
 head -5 _framework/FRAMEWORK.md | grep "版本"
 
-# 对比字库中是否有新变更
+# 对比子库中是否有新变更
 git diff --submodule .meta/framework-source
 ```
 
@@ -541,6 +541,8 @@ git diff --submodule .meta/framework-source
 ---
 
 ## 跨仓库同步
+
+> 本框架的跨仓库规则同步采用"上游 hub + 本地工作副本"机制：三条同步流（拉取/提升/分发）、冲突处理与 CHANGELOG 记录格式见 `_framework/notes/spec/rule-sync-mechanism.md`。以下为通用复制式同步的保留说明。
 
 ### 框架复制
 

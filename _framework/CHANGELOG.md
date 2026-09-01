@@ -1,7 +1,25 @@
 # 框架变更日志
 
 > 每条记录包含日期、类型、内容和影响范围
-> 类型: rule-add | rule-change | template-add | template-update | private-promote | structure
+> 类型: rule-add | rule-change | template-add | template-update | private-promote | structure | sync-from-upstream
+
+---
+
+## 2026-08-26 — private-promote: 采纳 renderer-lab 回推实践（仓库名修正 + 规则同步 spec + git 实践）
+
+**类型**: rule-change + spec-update
+
+**变更内容**:
+- MANUAL.md 修正：`learn-frame` → `code-craft-frame`（3 处）；"字库" → "子库"（笔误，10 处）
+- 新增 `notes/spec/rule-sync-mechanism.md`：本地-远程规则同步机制（上游 hub + 本地工作副本，三条同步流 + 冲突处理 + 记录格式）
+- 新增 `notes/spec/git-practices.md`：去子模块正确顺序、filter-repo 历史合并、`git rm --cached` 顺序陷阱、GitHub 改名重定向、Windows TLS 瞬断处置
+- MANUAL.md §跨仓库同步 加机制指针；CHANGELOG 类型表增加 `sync-from-upstream`
+
+**来源**: renderer-lab/_framework 实践反馈（2026-08-25/26 重组实战验证）
+
+**影响范围**:
+- 现有仓库需同步？否（均为文档修正与增量 spec；兄弟仓库按需更新子模块 pin）
+- 同步方式: `git submodule update --remote code-craft-frame` + 对比两份 CHANGELOG
 
 ---
 
