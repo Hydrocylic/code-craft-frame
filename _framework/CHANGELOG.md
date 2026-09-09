@@ -5,6 +5,26 @@
 
 ---
 
+## 2026-09-09 — private-promote: 采纳 renderer-lab 回推（轮次协作工作流 + 无头复现工具链 + 上下文经济 + agents 包 + 模板三区管理）
+
+**类型**: spec-update ×3 + component-add + template-update
+
+**变更内容**:
+- 新增 `notes/spec/round-collaboration-workflow.md`：reconstruction 轮次协作五节规范（轮次文档形态 / 问答流程含自检题设计三准则 / 代码轮执行 9 条 / 收尾清单 / 交接纪律）
+- 新增 `notes/spec/headless-reproduction.md`：无头复现工具链——JS 侧三步递进 + GPU 级真机复现章节（事件日志金标准 / 真机仪器化 / URL 参数回退开关）
+- 新增 `notes/spec/agent-context-economy.md`：Agent 上下文消耗大头分析与对策
+- 新增 `agents/` 组件区：README + text-region-editor 包（agent 定义 + region-replace.py，观察期通过；含 `--expect-lines` 并发防呆）
+- `templates/round-notes.md`：遗留问题两类 → 三类（新增「问题缓冲」区，防止细节拖垮整体进度）
+- 新增 `notes/explore/text-region-editor-agent.md`：agents 包规划与决策记录
+
+**来源**: renderer-lab/_framework 实践反馈（2026-08-26 ~ 09-09，webgl-path-tracer r00–r16 多轮验证）
+
+**影响范围**:
+- 现有仓库需同步？否（增量 spec/组件/模板字段，向后兼容）
+- 同步方式: `git submodule update --remote` + 对比两份 CHANGELOG
+
+---
+
 ## 2026-08-26 — private-promote: 采纳 renderer-lab 回推实践（仓库名修正 + 规则同步 spec + git 实践）
 
 **类型**: rule-change + spec-update
