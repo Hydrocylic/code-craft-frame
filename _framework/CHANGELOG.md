@@ -5,6 +5,28 @@
 
 ---
 
+## 2026-09-16 — private-promote: 采纳 renderer-lab 回推（命令交接纪律 + checkout 覆盖语义）
+
+**类型**: rule-add ×2
+
+**变更内容**:
+- `notes/spec/git-practices.md` 新增 **§7「命令交接纪律」**：Agent 把指令交给人类执行时的写法——先声明 shell /
+  少语法多重复（能展开成显式多行就不用循环）/ 循环体多条命令必须 `;` 分隔 / 先只读后写入分两步给 /
+  给出预期输出 / 破坏性动作给安全档位（`-d` 而非 `-D`、`--cached` 而非直接删）
+- 同文件新增 **§8「`git checkout <ref> -- <path>` 的覆盖语义」**：该形式会用 `<ref>` 的版本**静默覆盖**索引与工作区，
+  该路径下的未提交改动不警告、不 stash、不进 reflog 地丢失；纪律为「先 `git status --short`、有改动先提交、
+  取值范围能缩就缩、被抹掉后先查 stash 与会话留档」
+- 文首适用范围补"命令交接场景"，时间范围更新为 2026-08-25 ~ 09-16
+
+**来源**: renderer-lab/_framework 实践反馈（2026-09-16：两次命令交接事故 + 一次取值合并抹掉未提交内容）
+
+**影响范围**:
+- 所有"Agent 写指令、人类执行"的协作，以及所有"取值式合并"（切片合并、跨仓库取值）场景
+- 现有仓库需同步？否（增量 spec 小节，向后兼容）
+- 同步方式: `git submodule update --remote` + 对比两份 CHANGELOG
+
+---
+
 ## 2026-09-09 — private-promote: 采纳 renderer-lab 回推（轮次协作工作流 + 无头复现工具链 + 上下文经济 + agents 包 + 模板三区管理）
 
 **类型**: spec-update ×3 + component-add + template-update
