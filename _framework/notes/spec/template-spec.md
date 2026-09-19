@@ -30,6 +30,9 @@
 | 10 | `CLAUDE.md` | 仓库根目录 CLAUDE.md |
 | 11 | `task-plan.md` | docs/tasks/{name}-plan.md（product 项目标配，reconstruction 推荐） |
 | 12 | `task-log.md` | docs/tasks/{name}-log.md（product 项目标配，reconstruction 推荐） |
+| 13 | `dispatch-order.md` | `notes/agents/dispatch/<线头>-<YYYY-MM-DD>.md`（派工单：状态速览 / 通用纪律粘块 / 派工表 / kickoff / 待拍板 / 整理方自办 / 移交说明——见 `agent-dispatch.md` §2.2） |
+| 14 | `agent-roster.md` | `notes/agents/roster.md`（名册 + 生命状态台账：ID 约定 / 六态 / 档位 / 归档四步 / 活跃 / 已归档 / 写入范围——见 `agent-dispatch.md`） |
+| 15 | `handoff.md` | `notes/handoffs/<slug>.md`（交接件：谁 + 做了什么 + 当前状态 + 交给谁 + 坑 + 未决 + 冷启动自检） |
 
 ## 模板元要求
 

@@ -5,6 +5,33 @@
 
 ---
 
+## 2026-09-19 — private-promote: 采纳 renderer-lab 回推（多 Agent 派工与生命周期 + 三件套模板）
+
+**类型**: rule-add + spec-add + template-add ×3
+
+**变更内容**:
+- 新增 `notes/spec/agent-dispatch.md`：**多 Agent 派工与生命周期**——① 身份（ID = `<job>-<YYMMDD>`、
+  **一个 ID = 一段对话 + 一个「服务对象」**、换服务对象 = 新 ID 且**不写 `旧 → 新` 箭头**）；
+  ② 派工（**三件套：派工单 / 名册 / 交接件**、派工单七节结构与五条纪律、名册按**行所有权**维护）；
+  ③ 生命周期（六态 + `挂起` 写法、上下文档位、**归档四步** + 轻量归档例外）。
+  不依赖特定平台——只用版本库里的文档表达。
+- 新增模板 ×3：`templates/dispatch-order.md`（派工单：状态速览 / 通用交接纪律粘块 / 派工表含「阻塞谁」/
+  可粘贴 kickoff / 待拍板 / 整理方自办 / **移交说明**）、`templates/agent-roster.md`（名册：
+  活跃 / 已归档 / 写入范围**三表分离**）、`templates/handoff.md`（交接件六段 + 冷启动自检）。
+- `notes/spec/template-spec.md` 完整性表补第 13–15 项。
+
+**来源**: renderer-lab/_framework 实践反馈（2026-09-16 ~ 09-19）——从"多 Agent 边界"起步，
+经 5 条线（框架 / 轮次 / 调试 / 调研 / 文本修缮）、2 次归档、1 次派工单移交后收敛；
+期间踩坑（`旧 → 新` 写法歧义、跨线任务挂错位置、归档无判据、任务范围不明确、派工单原地改写）已并入 spec 各条
+
+**影响范围**:
+- 各仓库若采用本机制：建 `notes/agents/`（名册 + `dispatch/`）与 `notes/handoffs/`（交接件），落点可按本仓习惯改，
+  但**三件套分工**与**"服务对象"语义**建议保持
+- 现有仓库需同步？否（增量 spec 与模板，不影响既有项目结构）
+- 同步方式: `git submodule update --remote` + 对比两份 CHANGELOG
+
+---
+
 ## 2026-09-16 — private-promote: 采纳 renderer-lab 回推（命令交接纪律 + checkout 覆盖语义）
 
 **类型**: rule-add ×2
