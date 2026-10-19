@@ -1,7 +1,28 @@
 # 框架变更日志
 
 > 每条记录包含日期、类型、内容和影响范围
-> 类型: rule-add | rule-change | spec-add | spec-update | template-add | template-update | private-promote | structure | sync-from-upstream
+> 类型: rule-add | rule-change | spec-add | spec-update | template-add | template-update | private-promote | structure | sync-from-upstream | license
+
+---
+
+## 2026-10-19 — license + spec-add: MIT 许可证与敏感信息检查
+
+**类型**: license + spec-add + rule-change
+
+**变更内容**:
+- 新增 `LICENSE`（MIT；版权行用 `code-craft-frame contributors`，可改为所有者法名）；README 增“许可证”节。
+- 新增 `notes/spec/sensitive-data-check.md`：敏感类别、检查时点、工作树 / 历史 / 提交元数据 / 文件名扫描、发现处置、求同存异的边界与检查清单。
+- 新增 `_framework/scripts/check-sensitive.ps1`：默认扫工作树，`-History` 加历史，`-Out` 写报告；只报类别 / 文件 / 行号，不回显匹配值；脚本自身与 spec 因含模式字符串而默认排除。
+- `MANUAL.md` 静态检查清单与 `AGENTS.md` 提交边界补“提交或提升前自查”；README 维护节补指针。
+- 首次扫描结论：本库工作树与 23 个历史提交未发现凭据类内容；作者邮箱与历史项目名列为评估项，不自动改写历史。
+
+**来源**: 用户 2026-10-19 要求把脱敏作为长期检查项；首次扫描实践。
+
+**影响范围**: 现有实例需同步？否（按需采纳）。建议各实例在公开推送 / 对外交付前采用本 spec；实例可追加自己的敏感词表，不要求同版。
+
+**验证**: 工作树与历史按常见凭据 / PII 模式扫描；本地 Markdown 链接解析；`git diff --check`；未运行产品测试；未执行 Git 写操作。
+
+**回滚**: 删除 `LICENSE`、README“许可证”节与本 spec；回退 MANUAL / AGENTS 的两行检查项。
 
 ---
 

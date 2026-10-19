@@ -20,7 +20,7 @@ AI 协作会话中反复出现的**工作方式约定**，经 kotocord 会话验
 
 | 症状 | 判定 | 处置 |
 |------|------|------|
-| `0xc0000135`（含最小测试全挂） | DLL 缺失 | 先 `$env:PATH = "D:\Qt\...\bin;" + $env:PATH` |
+| `0xc0000135`（含最小测试全挂） | DLL 缺失 | 先 `$env:PATH = "<Qt-install>\bin;" + $env:PATH` |
 | 终端中文乱码 | 编码不匹配（不影响功能） | 字节级判定（重定向文件）→ PS 5.1 用 `chcp 65001` + `[Console]::OutputEncoding`；VS Code 集成终端无效时换 VS 开发者控制台（cmd/conhost） |
 | 外部服务连接失败 | 先看 OS 错误码 | `getaddrinfo failed` = DNS 解析失败（非 TLS/协议）；用 **sidecar 独立复现**绕过 app：先单独跑服务调用脚本，再隔离「系统解析 vs 进程解析」 |
 

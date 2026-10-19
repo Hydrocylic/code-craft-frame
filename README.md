@@ -27,4 +27,8 @@
 
 ## 维护
 
-作者副本维护；`commit` / `push` / tag 由仓库所有者执行。写入边界与目录职责见 [`AGENTS.md`](AGENTS.md)。
+作者副本维护；`commit` / `push` / tag 由仓库所有者执行。写入边界与目录职责见 [`AGENTS.md`](AGENTS.md)。提交或提升到上游前，按 [`sensitive-data-check.md`](_framework/notes/spec/sensitive-data-check.md) 做一次敏感信息自查。
+
+## 许可证
+
+MIT，见 [LICENSE](LICENSE)。贡献默认按同一许可证授权。
