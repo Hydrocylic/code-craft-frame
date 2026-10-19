@@ -2,18 +2,17 @@
 
 <!--
   模板: _framework/templates/task-log.md
-  适用: docs/tasks/{name}-log.md（product 项目）
-  也适用于 reconstruction 项目复杂轮次
-
-  ★ 核心规则：每次对话结束后追加时间戳条目，不覆盖历史。
+  适用: <task-dir>/<theme>-log.md
+  按需：执行时序、异常或验证过程需要独立长期保存时；短任务直接在 plan/交付件收尾。
+  不要求每次对话都追加空条目；有实质操作或决定时再记。
 -->
 
 > **关联计划**：[{name}-plan.md]({name}-plan.md)
-> **代码品读**：[{name}-code-review.md]({name}-code-review.md)
+> **代码品读**：[{name}-code-review.md]({name}-code-review.md)（按需）
 
 ---
 
-## 📝 [YYYY-MM-DD HH:MM] — 操作标题
+## [YYYY-MM-DD HH:MM] — 操作标题
 
 ### 操作
 
@@ -27,7 +26,7 @@
 
 | 文件 | 说明 |
 |------|------|
-| `path/to/file` | 用途描述 |
+| `<path>` | 用途描述 |
 
 ### 下一步
 
@@ -38,7 +37,7 @@
 <!--
   Bug 格式（内嵌在时间线中）：
 
-## 🐛 BUG-XXX — 标题
+## BUG-XXX — 标题
 
 **现象**: 具体表现
 **原因**: 根因分析

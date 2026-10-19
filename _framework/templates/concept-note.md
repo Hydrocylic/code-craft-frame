@@ -2,7 +2,7 @@
 
 <!--
   模板: _framework/templates/concept-note.md
-  适用: notes/concepts/<concept-name>.md
+  适用: <task-dir>/notes/<concept-name>.md（按需：随任务走、平铺；不强制 concepts/ 子目录）
 -->
 
 ## 定义
@@ -29,4 +29,4 @@
 
 ## 参考
 
-- <!-- 论文链接、文章链接、代码示例 -->
+- <!-- 论文链接、文章链接、代码示例；按引用纪律标 verified / web-read / from-memory-unverified -->

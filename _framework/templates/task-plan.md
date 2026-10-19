@@ -2,15 +2,15 @@
 
 <!--
   模板: _framework/templates/task-plan.md
-  适用: docs/tasks/{name}-plan.md（product 项目）
-  也适用于 reconstruction 项目复杂轮次
+  适用: <task-dir>/<theme>-plan.md
+  说明: 多步依赖、设计取舍、独立产物或验收边界时使用；简单任务直接在已有正文写目标/范围/验收/结果。
 -->
 
 > **目标**：一句话描述
 > **日期**：YYYY-MM-DD
-> **状态**：⬜ 待开始
-> **执行日志**：[{name}-log.md]({name}-log.md)
-> **代码品读**：[{name}-code-review.md]({name}-code-review.md)
+> **状态**：待开始 / 进行中 / 待验收 / 已完成
+> **执行日志**：[{name}-log.md]({name}-log.md)（按需）
+> **代码品读**：[{name}-code-review.md]({name}-code-review.md)（仅在确有独立品读交付时）
 
 ---
 

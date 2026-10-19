@@ -1,0 +1,6 @@
+# 本地私有池：保留占位，不提交内容
+_framework/private/*
+!_framework/private/.gitkeep
+
+# 工作区临时件不进入本仓
+_local/

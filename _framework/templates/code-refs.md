@@ -1,22 +1,25 @@
-# Code Refs — <Round-Title>
+# Code Refs — <任务 / 轮次标题>
 
 <!--
   模板: _framework/templates/code-refs.md
-  适用: curriculum/r<NN>-<title>/code-refs.md
+  适用: <task-dir>/<theme>-code-refs.md（**按需**：代码路径引用需要独立映射表时；
+        通常直接写进 notes/qa 更轻）
+  定位: 按“文件 + 符号”引用；行号只作取图时点的快照，实施后会漂移。
 -->
 
 ## 参考项目
 
-- **位置**: `reference/<project-name>`
+- **位置**: `<reference-path>`
 - **语言**: <language>
+- **基线**: <commit / 版本>
 
 ---
 
 ## 核心文件
 
-| 文件 | 行范围 | 内容描述 | 关联概念 |
+| 文件 | 符号 / 范围 | 内容描述 | 关联概念 |
 |------|--------|---------|---------|
-| `<path>` | `L1-L50` | <简述> | <概念> |
+| `<path>` | `<symbol>` | <简述> | <概念> |
 
 ---
 
@@ -25,21 +28,21 @@
 ### <片段标题>
 
 ```<language>
-# reference/<project>/<path>:<start>-<end>
+# <path>:<symbol>（行号仅作快照）
 <code>
 ```
 
 **要点**:
-- 
+-
 
 **与已学概念的关系**:
-- 
+-
 
 ---
 
 ## 调用关系图（可选）
 
-```
+```text
 <function_a>() → <function_b>() → <function_c>()
 ```
 
@@ -49,4 +52,4 @@
 
 | 实验 | 对应代码 | 关系 |
 |------|---------|------|
-| `<exp-name>` | `reference/<path>` | 验证 / 变化 / 拓展 |
+| `<exp-name>` | `<path>:<symbol>` | 验证 / 变化 / 拓展 |

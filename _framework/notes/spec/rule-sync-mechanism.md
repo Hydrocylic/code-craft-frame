@@ -1,71 +1,83 @@
-# 本地-远程规则建立机制（rule-sync-mechanism）
+# 规则维护与按需跨库共享
 
-<!--
-  位置: _framework/notes/spec/
-  版本: 2026-08-26 创建（由 renderer-lab 回推，泛化自其落地版本）
-  状态: active
--->
+本件定义通用上游（本库）与各实例 `_framework/` 之间的规则建立、采纳与提升。它取代 v2.0 的 submodule 同步流程；历史条目见 [`CHANGELOG.md`](../../CHANGELOG.md)。
 
-## 目的
-
-定义各学习仓库的本地 `_framework/` 与上游远程框架仓库 `code-craft-frame`（hub）之间的规则建立与同步流程，使"私有经验 → 共有规则 → 远程 hub → 其他工作区"全链路可追溯、可审阅。
-
-## 角色与载体
+## 1. 角色与事实
 
 | 角色 | 位置 | 说明 |
 |---|---|---|
-| 远程 hub | `<lab>/code-craft-frame/`（git submodule，pin 到 commit） | 所有学习仓库共用的框架规则库 |
-| 本地工作副本 | `<lab>/_framework/` | 日常使用；本地规则先在这里迭代 |
-| 同步账本 | `_framework/CHANGELOG.md` | 每条变更含日期/类型/来源/影响范围 |
-| 个人私有 | `_framework/private/` | gitignored；规则的孵化池 |
+| 通用上游 | 本库（独立 Git，公开） | 只收通用规则/方法/模板；作者副本 |
+| 实例 | 各工作区的 `_framework/` | 日常使用；目录、角色、产品路径由实例决定 |
+| 实例采纳记录 | 实例侧 `UPSTREAM.md`（建议） | 上游 URL、adopted commit、本地偏离、last review |
+| 私有池 | 实例 `_framework/private/` | 本地孵化；不进 Git、不进上游 |
+| 变更账 | 双方 `_framework/CHANGELOG.md` | 各记各的账；不互相续账 |
 
-## 三条同步流
+不设 submodule，不自动 pull，不自动合并，不覆盖实例规则。一个作者副本；其他工作区需要完整正文时临时 clone/fetch，只读。
 
-### 1. 远端 → 本地（拉取）
+## 2. 采纳（上游 → 实例）
 
-触发：上游 hub 有新 commit。
+触发：上游有新 commit，实例决定是否跟进。
 
-```bash
-git submodule status                    # code-craft-frame 前有 + 号 = pin 落后
-git diff --no-index --stat _framework code-craft-frame/_framework   # 只读对比
-```
+1. 记录当前 adopted commit；读取上游 `CHANGELOG.md`，按条目选择要采纳的变更。
+2. 只读对比：`git diff <old>..<new>`（或 `git diff --no-index` 两棵 `_framework`）。
+3. 逐条把需要的变更落回实例；本地已有偏离先保留，不整目录覆盖。
+4. 在实例 `CHANGELOG.md` 记 `sync-from-upstream`，标注上游 commit 与未采纳项。
+5. 更新实例 `UPSTREAM.md` 的 adopted / last review。
 
-流程：人类执行 `git submodule update --remote code-craft-frame` → 对比两份 CHANGELOG → 决定采纳哪些规则写入本地 `_framework/`（文件编辑由 Agent 完成）→ 本地 CHANGELOG 记一条 `sync-from-upstream`，标注上游 commit。
+不要求所有实例同版；不采纳不是错误，静默覆盖才是。
 
-### 2. 本地 → 远端（提升）
+## 3. 提升（实例 → 上游）
 
-触发：本地规则经多次验证成熟，且对多个学习仓库通用。
+触发：某条实践在实例中反复验证，且对多个工作区通用。
 
-1. 经验先在 `_framework/private/` 记录，多次验证；
-2. 提升到本地 `FRAMEWORK.md` / `MANUAL.md` / 模板 / spec；
-3. 本地 `CHANGELOG.md` 落条目（类型 + `**来源**: <lab>/...` + 影响范围）；
-4. 人类执行：在 code-craft-frame 子模块仓库内 `git add` / `git commit` / `git push`（上游 CHANGELOG 同步落条目）；
-5. 人类执行：`git add code-craft-frame` 更新子模块 pin 并提交。
+1. 先在实例 `_framework/private/` 或实例 spec 中记录实践与证据。
+2. 用户确认要提升；把实例路径、角色词表、产品名、任务编号替换为通用表述。
+3. 写入上游对应正本（`FRAMEWORK.md` / `MANUAL.md` / `notes/spec/` / `templates/`），同步受影响入口与模板。
+4. 在上游 `CHANGELOG.md` 记条目，`来源` 写实例与文件，不写产品内部细节。
+5. 上游 commit/push 由仓库所有者执行；实例侧记录采纳 commit。
 
-### 3. hub → 其他仓库（分发）
+提升不是复制整套实例框架；只迁移可复用部分。
 
-上游更新后，各学习仓库自行更新子模块 pin，不强制同步升级。hub 不代管任何仓库。
+## 4. 冲突处理
 
-## 冲突处理
+- 实例与上游同时改同一规则：以两份 CHANGELOG 条目对比，逐条决定；实例本地偏离优先保留在实例。
+- 提升中的规则与上游新规则冲突：先合并上游最新版，再提交实例增量。
+- 上游删改不自动传导到实例；实例继续使用旧版不构成错误，但应记录偏离。
+- 文件级只读对比命令：`git diff --no-index <a> <b>`。
 
-- 本地与上游同时改同一规则：以两份 CHANGELOG 的条目对比，逐条决定采纳；未提升的本地临时改动可被上游版本覆盖。
-- 提升中的规则与上游新规则冲突：先合并上游最新版，再在上游仓库提交本地增量。
-- 文件级冲突判断命令（只读）：
+## 5. 内容边界
 
-```bash
-git diff --no-index _framework/FRAMEWORK.md code-craft-frame/_framework/FRAMEWORK.md
-```
+上游只收通用内容：
 
-## 记录格式（CHANGELOG 条目）
+- 不收产品名、代码路径、任务编号、个人数据、未公开材料。
+- 例子可以来自实践，但要去标识；不能去标识的例子放实例。
+- 模板只提供结构，不预填实例内容。
+
+### 求同存异：最大公约数，不是合并所有实践
+
+| 层级 | 判据 | 落点 |
+|---|---|---|
+| **通用** | 去掉产品名、角色词表、具体路径后仍可执行；至少两个工作区适用 | 上游正本 |
+| **可选** | 有明确适用条件；默认不启用 | 上游的“可选实践”节，写清适用/不适用 |
+| **特色** | 只在单个项目成立，或依赖其产品/角色/工具 | 留实例；上游最多记一条“存在此做法”的指针 |
+
+- 不要求所有实例同版；偏离记在实例 `UPSTREAM.md`，不视为错误。
+- 提升时先问“这是公约数还是某个项目的特色”；拿不准就留在实例。
+- 上游只收“公约数”，不收“唯一正确答案”；实例之间不互相覆盖。
+
+## 6. CHANGELOG 记录格式
 
 ```markdown
 ## YYYY-MM-DD — <type>: <标题>
-**类型**: rule-add | rule-change | template-update | private-promote | structure | sync-from-upstream
+**类型**: rule-add | rule-change | spec-add | spec-update | template-add | template-update | structure | sync-from-upstream | private-promote
 **变更内容**: ...
-**来源**: <lab>/<path> 实践反馈（本地 → 远端提升时必填）
-**影响范围**: 现有仓库需同步？是/否；同步方式
+**来源**: <实例>/<path>（提升时必填；采纳时写上游 commit）
+**影响范围**: 现有实例需同步？是/否；同步方式
+**验证**: 实际检查了什么；未运行什么
 ```
 
-## 与旧流程的关系
+上游与实例各记各的账；历史条目不改写。
 
-替代 v1.1 MANUAL.md 的"手动复制目录 + 对比 CHANGELOG"跨仓库同步方式：规则流通仍有手工环节（git 指令由人类执行），但方向、账本与冲突处理已规则化。
+## 7. 与旧流程的关系
+
+v2.0 的 submodule + `git submodule update --remote` 流程已退出。当前模式是独立 Git + 按 commit 选择性采纳；不建 submodule，不设自动同步脚本。

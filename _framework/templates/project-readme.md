@@ -1,36 +1,32 @@
-# <Project-Name>
+# <服务对象名>
 
 <!--
   模板: _framework/templates/project-readme.md
-  适用: projects/<name>/README.md 或 products/<name>/README.md
+  适用: 服务对象入口 README（按需）
 -->
 
 ## 概述
 
-<!-- 1-2 句话描述项目是什么、学习/产出目标 -->
+<!-- 1–2 句话描述它是什么、当前目标是什么 -->
 
-## 参考项目
+## 参考 / 依据
 
 | 名称 | 路径 | 描述 |
 |------|------|------|
-| `<ref>` | `reference/<name>` | <简述> |
+| `<ref>` | `<reference-path>` | <简述> |
 
-## 课程轮次
+## 任务 / 批次
 
-<!-- 从 meta.yaml 的 rounds 同步 -->
+<!-- 从任务索引或 meta.yaml 同步；没有就删本节 -->
 
-| 轮次 | 主题 | 状态 | 完成日期 |
+| 任务 | 主题 | 状态 | 完成日期 |
 |------|------|------|---------|
-| r01 | `<title>` | planned | - |
+| `<task>` | `<title>` | planned | - |
 
-## 实验
+## 实验 / 证据
 
-- 实验目录: `experiments/`
+- 实验目录: `<experiment-dir>/`
 - 详见各实验子目录中的 `notes.md`
-
-## 简历
-
-- 简历描述: `resume/resume.md`
 
 ## 运行说明
 
@@ -41,6 +37,7 @@
 # <build-command>
 
 # 运行
+# <run-command>
 
 # 查看结果
 ```

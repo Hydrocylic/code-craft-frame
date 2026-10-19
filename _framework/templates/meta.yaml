@@ -1,42 +1,45 @@
-# <project-name> 项目元数据
+# <project-name> 元数据
 
 # ── 模板: _framework/templates/meta.yaml ──
-# 使用方式: 复制到 reference/<name>/meta.yaml、projects/<name>/meta.yaml 或 products/<name>/meta.yaml
+# 使用方式: 复制到服务对象根目录（项目 / 任务 / 参考区）的 meta.yaml。
 # 按实际情况填写，删除不需要的字段。
 
-project: <project-name>       # 必填：项目名称
-type: reconstruction          # reference | reconstruction | product
-status: planned               # planned | in-progress | completed | archived
+project: <project-name>       # 必填：项目 / 服务对象名称
+type: <instance-defined>      # 由实例定义（如 lab | reference | product | reconstruction）；不要求统一枚举
+status: planned               # 建议：planned | in-progress | paused | completed | archived
 created: YYYY-MM-DD           # 必填
-updated: YYYY-MM-DD           # 必填
+updated: YYYY-MM-DD           # 必填；= 对象自身最后活动（只修订元数据字段时不改它）
 
 description: >
-  简要描述项目目标和学习范围。
+  简要描述目标与范围。
   多行用缩进续接。
 
-refs:                         # 参考项目列表
-  - reference/<name>           #   主要参考
-  # - reference/<other>        #   次要参考（可选）
+refs:                         # 参考项目列表（可选）
+  - <reference-path>
+  # - <other>                 # 次要参考（可选）
 
-rounds:                       # 轮次索引（reconstruction 类型；随着推进逐步添加）
+rounds:                       # 轮次索引（仅使用轮次的实例；随推进添加）
   # - r01-<title>
   # - r02-<title>
 
-resume: resume/resume.md      # 简历描述文件位置
+# resume: <path>              # 仅需要求职主题的实例
 
-# 可选字段:
-# tags: [<domain-1>, <domain-2>]   # 领域标签
-# prerequisites:               # 前置知识要求
+# 可选字段（可自行增补——模板是提示，不是填空考卷）:
+# tags: [<domain-1>, <domain-2>]
+# prerequisites:
 #   - <concept>
+# self_rating: <1-5>
+# hours: <实际投入小时数>
+# code_repo: <path>           # 代码仓（不是“开发检出”）；仓有多个 worktree 时在同一行注释写明开发检出
+#
+# 注意: status 是机器可读的封闭枚举；中断 / 延后 / 封存 / 暂停一律用 `paused`，
+#       “什么时候能重启”写进该行注释，不造新词。实例可改枚举措辞，但不要新增同义词。
 
-# ── reference 类型额外字段:
-# source:                       # 参考源码信息
-#   url: <原始URL或"manual">
+# ── 参考类对象额外字段:
+# source:
+#   url: <原始 URL 或 "manual">
 #   license: <许可证>
 #   language: <编程语言>
 #   lines: <大约行数>
-# notes:                        # 分析笔记索引
-#   - notes/overview.md
-
-# ── product 类型额外字段:
-# derived_from: projects/<name> # 如果从 reconstruction 转换而来
+# notes:
+#   - <notes-path>

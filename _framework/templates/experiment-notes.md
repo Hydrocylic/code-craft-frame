@@ -2,7 +2,7 @@
 
 <!--
   模板: _framework/templates/experiment-notes.md
-  适用: experiments/<exp-name>/notes.md
+  适用: 实验目录的 notes.md
 -->
 
 ## 元信息
@@ -10,8 +10,8 @@
 | 字段 | 值 |
 |------|-----|
 | 日期 | YYYY-MM-DD |
-| 关联轮次 | `curriculum/r<NN>-<title>` |
-| 参考项目 | `reference/<name>` |
+| 关联任务 | `<task-dir>` |
+| 参考项目 | `<reference-path>` |
 | 运行环境 | <语言版本、系统、硬件> |
 
 ## 实验目的
@@ -27,10 +27,10 @@
 # <env-setup>
 
 # 2. 运行
-<run-command> projects/<project>/experiments/<exp-name>/src/<file>
+<run-command> <experiment-dir>/src/<file>
 
 # 3. 输出位置
-# projects/<project>/experiments/<exp-name>/outputs/
+# <experiment-dir>/outputs/
 ```
 
 ## 预期结果
@@ -61,7 +61,7 @@
 ### <坑的描述>
 
 **错误信息**:
-```
+```text
 
 ```
 

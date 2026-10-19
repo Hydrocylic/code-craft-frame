@@ -1,7 +1,54 @@
 # 框架变更日志
 
 > 每条记录包含日期、类型、内容和影响范围
-> 类型: rule-add | rule-change | template-add | template-update | private-promote | structure | sync-from-upstream
+> 类型: rule-add | rule-change | spec-add | spec-update | template-add | template-update | private-promote | structure | sync-from-upstream
+
+---
+
+## 2026-10-19 — spec-update: 通用化 git / naming / 任务工作流与模板；确立“求同存异”
+
+**类型**: rule-change + spec-update ×3 + template-add ×11 + template-update ×9
+
+**变更内容**:
+- 在 `FRAMEWORK.md` §六、`rule-sync-mechanism.md` §5 与根 `README.md` 确立**求同存异**：上游只收跨工作区成立的“最大公约数”；有适用条件的做法标“可选实践”，默认不启用；只对单项目成立的特色留在实例。不要求所有实例同版。
+- `git-practices.md` 重写为 v3.0：保留 commit message、子模块治理、命令交接、覆盖语义、Agent git 边界、取证纪律、分支/worktree 与历史重写；把检出名、分支名、实例事件改为占位符或“可选实践”。
+- `naming-conventions.md` 重写为 v3.0：目录/字段/模板/路径写法通用化；`type` 与 `status` 由实例定义；去掉项目类型与简历绑定。
+- `round-collaboration-workflow.md` 重写为 v3.0：按需建件、验证门槛、问答闭环、职责边界、调度链、验证分工、实施纪律、收尾与接力；去掉本库 job 词表与产品路径，标出可选实践。
+- `template-spec.md`：补“长期读物、架构说明与设计意图”稳定锚点 `#architecture-reading`；索引扩到 25 项并标可选实践。
+- 新增模板：`AGENTS.md`、`task-contract.md`、`round-plan.md`、`round-log.md`、`round-plain-plan.md`、`record-sheet.md`、`reference-audit.md`、`worktree-local.md`、`handoff-request.md`、`handoff-conventions.md`、`handoff-delivery.md`。
+- 刷新模板：`meta.yaml`、`project-readme.md`、`round-notes.md`、`qa.md`、`code-refs.md`、`concept-note.md`、`experiment-notes.md`、`task-plan.md`、`task-log.md`（去掉项目类型/轮次/简历绑定）。
+- 归档移动已完成：v2.0 项目类型、agents、explore、旧 spec 与旧模板进入 `archived/_framework/`；`CLAUDE.md` 已改为退役占位并由移动脚本删除当前树副本。
+
+**来源**: 实例 `_framework` 实践回推（实例名与路径留在实例侧）；用户 2026-10-19 明确“求同存异、取最大公约数、保留项目实践特色”。
+
+**影响范围**: 现有实例需同步？否（按需选择性采纳）。新增模板中的 `handoff-*`、`worktree-local`、`round-plain-plan` 为可选实践，不要求所有实例建目录或文件。
+
+**验证**: 本地 Markdown 链接逐条解析；`git diff --check` 无错误；未运行产品测试；未执行 Git 写操作（commit/push 归所有者）。
+
+**回滚**: 按本条目逐文件回退到上一版；归档内容可从 `archived/_framework/` 反向移动；`FRAMEWORK.md` / `MANUAL.md` 的 v3.0 重写在上一批条目中另有记录。
+
+---
+
+## 2026-10-19 — structure: 转为通用协作框架 v3.0；归档 v2.0 学习框架
+
+**类型**: structure + rule-change + spec-add ×2 + spec-update ×5 + template-add ×3
+
+**变更内容**:
+- 新增根 `README.md` 与 `AGENTS.md`：定位、入口、写入边界；本库是通用上游，实例按 commit 采纳，不 submodule、不自动同步。
+- `FRAMEWORK.md` / `MANUAL.md` 重写为 v3.0 通用协作版：最小参考骨架、授权/所有权/证据分离、任务按需建件、规则上下游、CHANGELOG 正本；移除项目类型/简历/CLAUDE 强制项。
+- `rule-sync-mechanism.md` 重写：独立 Git + 按 commit 选择性采纳 + 实例 `UPSTREAM.md` 记录 + 提升时去实例化；旧 submodule 流程退出。
+- 从实例回推并去标识：`agent-context-economy`、`code-review-classification`、`headless-reproduction`、`platform-pitfalls`（新增，修正 §3 错位）、`test-preflight`（新增）。
+- 新增模板 `session-handoff.md`、`conventions-card.md`、`manual-task-sheet.md`；`agent-roster.md` / `dispatch-order.md` 改为任务级、无全局名册；`template-spec.md` 索引改为通用路径并标注退役模板。
+- 退役并归档到 `archived/_framework/`：`project-types/`、`agents/`、`notes/explore/`、`agent-dispatch.md`、`task-note-system.md`、`CLAUDE.md`、`daily-note.md`、`handoff.md`、`practice-note.md`、`resume-project.md`。文件移动由仓库所有者执行；`CLAUDE.md` 已先改为退役占位。
+- 新增 `.gitignore`：`_framework/private/*` 排除、保留 `.gitkeep`；忽略 `_local/`。
+
+**来源**: 实例 `_framework` 实践回推（2026-09-19 ~ 2026-10-19；实例名与路径留在实例侧）；用户 2026-10-19 拍板 D1/D4（转通用协作版、退休清单照准）。
+
+**影响范围**: 现有实例需同步？否（各自持有副本；按需选择性采纳）。本批改变默认骨架与规则索引；旧的 project-types/agents/CLAUDE/任务三元组不再是默认。
+
+**验证**: 入口与规范链接逐条解析；`git diff --check`；未运行产品测试；未执行 Git 写操作（commit/push 归所有者）。
+
+**回滚**: 恢复 `_framework/` 旧文件与 `archived/` 反向移动；删除新增入口/模板/.gitignore；`FRAMEWORK.md` / `MANUAL.md` 回退到 2026-09-19 版本（Git 历史 `7eb8e94`）。
 
 ---
 

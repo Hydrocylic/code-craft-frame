@@ -1,607 +1,98 @@
 # 框架使用手册
 
-> 配套 `FRAMEWORK.md` — 先读方法论，再看本手册
-> 版本: v2.0 | 创建: 2026-07-23 | 重构: 2026-08-07
-
----
+版本：3.0 · 2026-10-19 · 本库操作层；原则见[总纲](FRAMEWORK.md)。按任务阅读，不是所有 agent 的必读前置。
 
 ## 快速开始
 
-### 在新仓库使用本框架
-
-```bash
-# 1. 复制框架骨架
-cp -r <source-repo>/_framework/ <new-repo>/_framework/
-
-# 2. 创建必要目录
-mkdir -p reference projects products notes/daily notes/concepts notes/resources envs
-
-# 3. ★ 创建 CLAUDE.md（Agent 冷启动文件）
-# 使用 _framework/templates/CLAUDE.md 模板，填入新仓库的具体内容
-# 必须包含：仓库定位、核心规则、目录速查、创建约定、注意事项
-
-# 4. 根据框架模板创建 .gitignore
-# 参考 _framework/FRAMEWORK.md 中的 git 策略
-
-# 5. 可选：用 submodule 引入参考项目
-git submodule add <url> reference/<project-name>
-```
-
-### 在已有仓库采用本框架
-
-> **重要：先审计，出报告，等确认，再动手。不要直接开始移动文件。**
-
-**Phase 1: 审计（只读操作）**
-
-```
-├── 列出当前仓库中的所有文件和目录
-├── 对照 FRAMEWORK.md §二 的目录结构，将现有内容分类：
-│   ├── 哪些已经是参考项目的源码？      → reference/<name>/<source>/
-│   ├── 哪些是学习过程中的笔记和实验？  → projects/<name>/curriculum/ 或 experiments/
-│   ├── 哪些是独立的产品代码？          → products/<name>/src/
-│   ├── 哪些是跨项目的通用笔记？        → notes/
-│   ├── 哪些是环境配置文件？            → envs/
-│   └── 哪些是不属于以上任何分类的？    → 需要讨论
-└── 标记"不需要移动"的文件（如 README.md、.gitignore 等根目录文件）
-```
-
-**Phase 2: 提案（输出调整报告，不修改任何文件）**
-
-调整报告应包含：
-- **现状概览**: 当前文件数量和分布
-- **调整方案**: before/after 目录结构对比
-- **影响边界**: 明确哪些文件不动、哪些移动、移动后的路径
-- **不归类的项目**: 列出来，等待用户决定
-- **建议但不执行**: 如"这里建议创建 meta.yaml"（但不创建）
-
-**Phase 3: 确认（等待用户审核）**
-
-用户审核方案后：
-- 可能同意全部方案
-- 可能调整部分路径
-- 可能否决某些变动
-- 可能要求补充新内容
-
-**Phase 4: 执行（按确认后的方案操作）**
-
-分为两个子阶段：
-- **4a. 结构调整**（批量操作，确认后可以执行）: 创建目录、移动文件、删除空目录
-- **4b. 内容生成**（逐一操作，仅在用户明确要求时执行）: 创建 meta.yaml、填写 README 模板、撰写笔记 — 每一项都需独立确认
-
-### Agent 行为约束
-
-当使用 Agent（如 Claude Code）辅助结构调整时，Agent 应遵守：
-
-1. **不主动批量生成文件** — 即使在 Phase 4，如果方案中包含"创建 5 个 meta.yaml"这样的批量操作，Agent 应逐一确认而非静默批量创建
-2. **模板只复制、不填写** — 从 `templates/` 复制模板文件后，不自动填充内容（除非被明确要求）
-3. **区分"结构迁移"和"内容生成"** — 移动文件是结构操作，可以批次处理；撰写笔记内容是生成操作，必须逐项确认
-4. **默认只到 Phase 2** — Agent 收到"帮我按框架调整"这类指令时，默认只执行 Phase 1+2（审计+出报告），不自动进入执行
-
----
+1. 读[根入口](../AGENTS.md)与当前任务，自报身份、目标和可写路径。
+2. 查看 Git 状态；同一路径有并行执行线时，先与用户确认旧线已停、无写入冲突。
+3. 在任务说明中列目标、范围、验收、验证执行者；缺前置就停，不凭角色推定权限。
+4. 小步修改，验证已授权的项目；命令失败保留原文，区分产品错误与环境限制。
+5. 交付结果、证据与未竟去向；只同步实际被引用的摘要。
 
 ## 结构调整总则
 
-本节适用于所有涉及**目录重组、文件迁移、项目类型转换**的场景。核心原则：
+适用：移动/合并/删除文件、调整分区、类型转换、重写会丢弃现有内容的大段文档。
 
-> **先给方案、等确认、再动手。不主动批量生成内容。**
+1. **审计**：列真实用途、活引用、未提交面；未知归属先保留。
+2. **提案落盘**：写来源→目标、保留/删除清单、活引用修补、验收与回退。无结构授权时在这里等用户。
+3. **确认范围**：用户已明确授权的批次可按落盘清单实施；新增范围或不可逆风险仍须问。
+4. **执行与核验**：先保存需要保护的原稿；复制/迁移比较内容哈希；修当前入口，历史引用不批量追修。
+5. **收尾**：报告实际改变、未归类项、保护件去向。失败停在可解释的状态，不掩盖半完成迁移。
 
-### 四步流程
+目录调整不自动授权批量生成内容。模板只作结构参考；是否填写取决于是否已授予该内容任务。
 
-| 阶段 | 操作 | 是否修改文件 | 输出 |
-|------|------|:-----------:|------|
-| **Phase 1: 审计** | 扫描现状、归类内容 | ❌ 只读 | 现状清单 |
-| **Phase 2: 提案** | 给出调整方案、影响范围 | ❌ 不修改（仅写提案笔记） | 调整报告（写入被分析工作区的 `.md` 笔记） |
-| **Phase 3: 确认** | 用户审核方案 | ❌ 等待 | 确认/否决/修改 |
-| **Phase 4: 执行** | 按确认后的方案操作 | ✅ | 4a.结构调整 + 4b.内容生成(按需) |
+### 文本删改
 
-### Phase 4 的语义区分
+当前规则与快照允许重写，不要求无限追加覆盖注。被替代措辞可删除，但用户原话、关键数字、技术决策和未提交内容要有历史落点。仅 Git 历史不足以保护未提交原稿：此时先保存实际文件快照。删除清单记执行单或日志，不用每句话一条日志。
 
-这是最重要的区分：
+### 工具与目录
 
-| 操作类型 | 定义 | 执行方式 | 示例 |
-|----------|------|---------|------|
-| **结构调整 (4a)** | 移动文件、创建目录 | 确认后可以批量执行 | `mv old/file.md new/file.md` |
-| **内容生成 (4b)** | 创建新文件并填充内容 | 每一项都需独立确认 | "创建 r01/notes.md 并填写学习目标" |
+先选合适工具，别因某工具不支持现有布局就建立第三套工作区。删除/移动前核对解析后的绝对路径；目录含联接时先识别边界，不盲目递归删除。
 
-**结构调整**改变的是文件位置，不创造新内容。**内容生成**创造新的知识资产，必须由用户驱动。
+## 权限与执行者
 
-### Agent 行为约束
+文件修改与命令执行分别判定：用户授予编辑某文档，不等于授予 Git 提交、安装依赖或发布。
 
-当使用 Agent（如 Claude Code）辅助结构调整时：
+| 动作 | 默认 | 明确授权后 |
+|---|---|---|
+| 读文件、搜索、Git 只读查询 | agent 可执行 | 不变 |
+| 编辑任务内文件 | 有该任务及路径授权才可做 | 不得超出指定范围 |
+| 类型检查、测试、构建、启动本地服务 | 任务单注明执行者；未授予执行权限则交用户 | 可由实施或按需独立验证执行指定命令，登记产物与服务退出方式 |
+| Git 写操作、联网获取、依赖安装 | 用户执行 | 仅执行用户明确授权的动作，用完即收 |
+| 发布/部署、破坏性清理 | 必须明确确认 | 不从“大范围框架优化”推定获准 |
 
-1. **默认停止在 Phase 2** — 收到"帮我按框架调整目录"时，只做审计+出报告，不等确认不执行
-2. **提案落盘** — Phase 2 的调整报告必须写成 `.md` 笔记文件写入被分析的工作区（如项目 `notes/` 或根目录 `notes/`），而非仅作为会话文本。提案笔记需包含 before/after 对比、影响范围、不归类项
-3. **不批量创建内容文件** — 不应当在一次操作中创建 10 个 `notes.md` 并自动填充
-4. **模板只复制不填写** — 可以提议"这里需要 meta.yaml"，但只在用户确认后才从模板复制，且不自动填写
-5. **区分"移动"和"生成"** — 批量移动文件没问题，批量生成笔记内容不可以
-6. **报告要可审核** — 调整报告必须包含 before/after 目录对比，使用户能逐项判断
+本表统一解释入口、规范与模板中的“自查/复跑”：**验证责任不自动产生执行权限**。更高优先级的运行环境限制始终有效。
 
----
+## 并行与接手
 
-## 创建参考项目（阅读）
+不同路径明确分工，同文件/共享接口串行；没有运行时锁时，靠用户协调排队，不能承诺自动防冲突。
 
-参考项目用于只读参考。源码保持原样，分析笔记放在 reconstruction 项目的 curriculum 中。
+接手最小清单：旧线已停写的依据、未提交面、已完成事项、未竟事项、下一动作与验证状态。用户决定旧线归档时可以带未完成项，但必须写接手方；不要把旧行复制成第二个活跃写者。
 
-### 步骤
+## 任务契约与 kickoff
 
-```bash
-# 1. 创建项目目录
-mkdir -p reference/<project-name>
+按任务实际需要建立契约；简单任务可在已有正文中直接写清目标、范围、验收和结果。
 
-# 2. 放置或克隆参考源码到项目目录（手动操作）
-#    - 下载的源码 → reference/<project-name>/<source>/
-#    - git submodule → git submodule add <url> reference/<project-name>
+任务契约至少包含：目标/非目标、可写/不可写路径、前置、可判定验收、验证命令及执行授权、交付落点。实施类任务按需区分硬约束、建议路线和待证假设；建议路线可在授权边界内调整，硬约束与含义变化必须反馈。契约可以是 plan/design 的一节，不要求独立文件。没有测试权限时填写“待用户执行”，不能把未跑标为通过。
 
-# 3. 创建 meta.yaml
-cp _framework/templates/meta.yaml reference/<project-name>/meta.yaml
-#   编辑: type: reference, 填写 source 信息
+kickoff 按需生成并只指向契约，由用户决定和启动执行线；kickoff 不补契约，也不产生新授权。
 
-# 4. 创建 README.md
-#   记录来源、获取方式、内容概述
+普通内部取舍自行完成不记账；真正待用户裁定的功能、范围、验收事项才写推荐、影响与下一步。已授权可逆事项继续做，非阻塞项在检查点集中呈报；权限、安全、不可逆动作、写入冲突或实质需求冲突及时停问。
 
-# 5. （可选）创建 RESOURCES.md
-#   记录外部资源（数据集、权重等）的获取方式
-```
+人工步骤较多、需复制命令或结构化回收时采用人工任务单模板；单个简短步骤可直接留在任务契约。给人类的命令块应写清 shell、前置状态与预期结果；不可自然触发的状态改用获授权的自动化验证或明确辅助条件。
 
-> **注意**: reference 项目**不创建 notes/ 目录**。对参考代码的分析解读归属到 `projects/<name>/curriculum/` 中，通过 `code-refs.md` 建立源码映射。
+## 状态同步
 
-详细骨架见 `_framework/project-types/reference/SKELETON.md`。
+正本分工见[总纲 §七](FRAMEWORK.md)。
 
----
-
-## 创建复制项目（重构）
-
-复制项目是本框架的核心学习载体。从参考项目中拆解代码，逐步重构。
-
-### 前置条件
-
-- 已有至少 1 个参考项目
-- 对参考项目的知识体系有基本理解
-- 准备好动手复现
-
-### 步骤
-
-```bash
-# 1. 创建项目骨架
-mkdir -p projects/<project-name>/{src/include,curriculum,experiments,resume,notes/concepts}
-
-# 2. 创建 meta.yaml（type: reconstruction）
-cp _framework/templates/meta.yaml projects/<project-name>/meta.yaml
-
-# 3. 创建 README.md
-cp _framework/templates/project-readme.md projects/<project-name>/README.md
-
-# 4. 设计首轮课程
-mkdir -p projects/<project-name>/curriculum/r01-<title>
-# 创建 notes.md, qa.md, code-refs.md
-
-# 5. 创建简历占位
-cp _framework/templates/resume-project.md projects/<project-name>/resume/resume.md
-```
-
-### meta.yaml 示例
-
-```yaml
-project: <project-name>
-type: reconstruction
-status: planned           # planned → in-progress → completed → archived
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-description: >
-  简要描述学习目标和范围。
-
-refs:
-  - reference/<ref-project>
-
-rounds: []
-
-resume: resume/resume.md
-```
-
-详细骨架见 `_framework/project-types/reconstruction/SKELETON.md`。
-
----
-
-## 创建产出项目（产品）
-
-产出项目面向展示和复用。产品代码统一在 `src/`，迭代记录在 `docs/` + `notes/`。
-
-### 步骤
-
-```bash
-# 1. 创建产品骨架
-mkdir -p products/<product-name>/{src/include,docs/overview,docs/tasks,resume,notes/iterations,notes/concepts}
-
-# 2. 创建 meta.yaml（type: product）
-cp _framework/templates/meta.yaml products/<product-name>/meta.yaml
-
-# 3. 创建文档系统骨架
-touch products/<product-name>/docs/overview/project-intro.md
-touch products/<product-name>/docs/overview/milestones.md
-touch products/<product-name>/docs/overview/structure-changes.md
-touch products/<product-name>/docs/issues.md
-touch products/<product-name>/docs/decisions.md
-
-# 4. （推荐）创建 docs/README.md 和 knowledge-base.md
-# docs/README.md 描述文档系统自身的结构和使用规则
-# knowledge-base.md 用于 QA 格式的基础知识补全（单体文件，不按主题拆分）
-
-# 5. 创建简历占位
-cp _framework/templates/resume-project.md products/<product-name>/resume/resume.md
-```
-
-详细骨架见 `_framework/project-types/product/SKELETON.md`。
-
-### 产出项目 submodule 变体
-
-产品代码在独立 git 仓库时，以 submodule 挂载到 `products/<name>/`（纯代码），笔记按 product 骨架镜像到元仓库 `notes/<name>/`：
-
-```
-# 1. 挂载 submodule (用户执行)
-git submodule add <repo-url> products/<name>
-
-# 2. 在元仓库创建镜像笔记目录
-mkdir -p notes/<name>/{docs/overview,docs/tasks,notes,resume}
-
-# 3. 索引 + 支撑文件
-#    notes/<name>/README.md     — 笔记索引
-#    docs/issues.md             — 标配
-#    docs/decisions.md          — 推荐
-#    docs/knowledge-base.md     — 推荐
-```
-
-设计理由: submodule 仓库保持纯代码，元仓库承载设计讨论、配置审查、简历准备等私有内容。完整规范（映射表 + 目录语义）见 `_framework/project-types/product/SKELETON.md` §Submodule 变体。
-
----
-
-## 项目类型转换
-
-项目类型可以转换（如 reconstruction → product）。**转换操作必须遵循"结构调整总则"**：先审计现有代码/笔记、出转换方案、等用户确认、再动手迁移。
-
-转换规则和详细步骤见：
-- `_framework/project-types/reference/conversion.md`
-- `_framework/project-types/reconstruction/conversion.md`
-- `_framework/project-types/product/conversion.md`
-
-Agent 辅助转换时，默认只执行审计+提案（Phase 1+2），不自动执行结构调整。
-
----
-
-## 添加新轮次
-
-在一轮学习完成后，需要增加新一轮时：
-
-```bash
-# 创建新轮次目录
-mkdir -p projects/<project-name>/curriculum/r0<N>-<title>
-
-# 从模板创建笔记
-cp _framework/templates/round-notes.md projects/<project-name>/curriculum/r0<N>-<title>/notes.md
-cp _framework/templates/qa.md projects/<project-name>/curriculum/r0<N>-<title>/qa.md
-cp _framework/templates/code-refs.md projects/<project-name>/curriculum/r0<N>-<title>/code-refs.md
-```
-
-更新 `meta.yaml` 的 `rounds` 列表和 `updated` 字段。
-
-### 轮次编号约定
-
-- 使用两位数编号：`r01`, `r02`, ..., `r10`, ...
-- 编号只表示推荐顺序，不是强制的先后依赖
-- 如果需要在两轮之间插入：`r02b-<title>`
-- 如果有补充/拓展轮次：`r03-supplement-<title>`
-
----
-
-## 创建实验
-
-### 步骤
-
-```bash
-mkdir -p projects/<project-name>/experiments/<exp-name>/{src,outputs}
-
-# 从模板创建
-cp _framework/templates/experiment-notes.md projects/<project-name>/experiments/<exp-name>/notes.md
-```
-
-### 实验代码
-
-将实验代码放在 `src/` 目录中。代码文件中使用注释标注：
-- 关联的课程轮次
-- 参考了哪些参考项目代码
-- 关键参数说明
-
-### 运行指令
-
-在 `notes.md` 中写清楚运行指令（使用从仓库根目录的相对路径）：
-
-```markdown
-## 运行方式
-
-```bash
-# 编译型语言
-<compiler> <flags> projects/<project>/experiments/<exp-name>/src/<file> -o outputs/<binary>
-./outputs/<binary>
-
-# 脚本型语言
-<run-command> projects/<project>/experiments/<exp-name>/src/<file>
-
-# 查看结果
-ls projects/<project>/experiments/<exp-name>/outputs/
-```
-```
-
-### 运行指令脚本（可选）
-
-如果编译/运行命令较长，可以创建 `run.ps1` (Windows) 或 `run.sh` (Linux)：
-
-```powershell
-# run.ps1 — 示例
-param(
-    [string]$BuildType = "Release"
-)
-cmake -B build -DCMAKE_BUILD_TYPE=$BuildType && cmake --build build
-```
-
----
-
-## 撰写简历
-
-项目完成（所有轮次结束）后，填写 `resume/resume.md`。
-
-使用 `_framework/templates/resume-project.md` 模板。
-
-简历撰写要点：
-1. **不要复述过程** — 写成果，不写流水账
-2. **技术栈要精确** — "PyTorch 2.0, ResNet18, LoRA (PEFT)" 或 "C++20, STL, CMake 3.28" 而非 "深度学习" 或 "C++"
-3. **量化优于定性** — "ROUGE-L 从 0.07 提升到 0.22" 优于 "效果显著提升"
-4. **写一个关键难点** — 面试官爱问"你遇到的最大挑战是什么"
-
----
-
-## Git Submodule 管理
-
-### 概述
-
-框架推荐对**有上游**的参考项目使用 git submodule。但对于**已发布的稳定版本**（如从 GitHub Release 下载的源码包），使用普通目录即可。
-
-### 添加参考项目为 submodule
-
-```bash
-# 添加 submodule
-git submodule add <repository-url> reference/<project-name>
-
-# 首次克隆后初始化
-git submodule init
-git submodule update
-
-# 或者克隆时一步到位
-git clone --recurse-submodules <repo-url>
-```
-
-### 固定版本
-
-添加 submodule 后，建议固定到特定 commit 或 tag（而非追踪分支），确保参考代码的不可变性：
-
-```bash
-cd reference/<project-name>
-git checkout <tag-or-commit>
-cd ../..
-git add reference/<project-name>
-git commit -m "fix: pin reference/<project-name> to <tag>"
-```
-
-### 更新参考项目
-
-当上游发布新版本，需要更新参考时：
-
-```bash
-# 进入 submodule 目录
-cd reference/<project-name>
-
-# 拉取最新
-git fetch origin
-
-# 切换到新版本
-git checkout <new-tag-or-commit>
-
-# 回到仓库根目录，提交更新
-cd ../..
-git add reference/<project-name>
-git commit -m "ref: update reference/<project-name> to <new-version>"
-```
-
-### 移除 submodule
-
-```bash
-# 1. 从 .gitmodules 中移除
-git submodule deinit -f reference/<project-name>
-
-# 2. 删除目录
-rm -rf reference/<project-name>
-
-# 3. 从 git 中移除
-git rm -f reference/<project-name>
-
-# 4. 清理 .git/modules/ 中的残留
-rm -rf .git/modules/reference/<project-name>
-```
-
-### 注意事项
-
-- Submodule 更新后，必须在父仓库中 commit 这次引用变更——否则其他克隆者看到的仍是旧版本
-- Submodule 的 `.git` 是指向父仓库 `.git/modules/` 的指针，复制目录时需要注意
-- 如果参考项目需要搜索/跳转代码，普通目录的体验比 submodule 好——按需选择
-- **慎用 `--recursive`** — 参考项目内部可能有自己的嵌套子模块（测试框架、第三方依赖等）。`git submodule update --init --recursive` 会把参考项目的构建依赖也一并拉取。对于只读参考场景，用 `git submodule update --init` 即可，无需递归
-
----
-
-## 将此仓库作为子库（submodule）纳入其他项目
-
-### 场景
-
-本仓库的核心资产是 `_framework/` 目录。其他学习仓库可以：
-1. **复制方式**: `cp -r code-craft-frame/_framework/ <other-repo>/_framework/`（最简单，但失去与母库的更新关联）
-2. **子库方式**: 将 code-craft-frame 作为 submodule 引入，然后从其 `_framework/` 中引用模板和规则
-
-### 子库（submodule）方式
-
-```bash
-# 在目标学习仓库中
-cd <target-repo>
-
-# 1. 添加本库为 submodule（放在隐藏/元目录中）
-git submodule add <code-craft-frame-url> .meta/framework-source
-
-# 2. 在 CLAUDE.md 中指向子库中的框架
-# CLAUDE.md:
-# 框架来源: .meta/framework-source/_framework/
-# 模板路径: .meta/framework-source/_framework/templates/
-
-# 3. 创建新项目时从子库复制模板
-cp .meta/framework-source/_framework/templates/meta.yaml projects/<name>/meta.yaml
-cp .meta/framework-source/_framework/templates/CLAUDE.md ./CLAUDE.md
-```
-
-### 更新子库中的框架
-
-```bash
-# 当母库中的 _framework/ 有更新时
-cd <target-repo>/.meta/framework-source
-git fetch origin
-git checkout origin/master  # 或特定的 tag/commit
-cd ../..
-git add .meta/framework-source
-git commit -m "meta: update framework-source to <version>"
-```
-
-### 子库 vs 复制的选择
-
-| 维度 | 复制 _framework/ | submodule 子库 |
-|------|-----------------|---------------|
-| 简单度 | ✅ 一步完成 | 需要理解 submodule |
-| 独立性 | ✅ 完全独立，可自行修改 | 修改需在母库中进行 |
-| 同步更新 | ❌ 手动对比 CHANGELOG | ✅ `git fetch` + checkout |
-| 适合场景 | 想摆脱母库，独立演化 | 想持续获取框架更新 |
-| 版本追踪 | 自己维护 | 通过 submodule commit 追踪 |
-
-**建议**: 
-- 刚起步的学习仓库 → 复制方式，简单直接
-- 多个学习仓库需要同步框架更新 → 子库方式
-- 对框架有了自己的修改 → 复制方式（分叉演化）
-
-### 框架更新检查
-
-无论使用哪种方式，定期检查 `CHANGELOG.md` 的变更：
-
-```bash
-# 查看当前框架版本
-head -5 _framework/FRAMEWORK.md | grep "版本"
-
-# 对比子库中是否有新变更
-git diff --submodule .meta/framework-source
-```
-
----
+- 并行写者状态由用户或当次 kickoff/交接说明；它不是锁或授权正本。不要把“最近没活动”当成已停止，重叠写入前由用户或对应执行线确认。
+- 跨任务未完事项只保留下一动作与证据指针，不复制长段历史。
+- 完成状态必须有依据；未核实条目标“待核”，不因收尾推定所有缺陷已修。
+- 任务记录适用的规则路径与可定位版本，不复制规则全文。普通规则调整默认用于新任务；活动任务在批次或查收点核对受影响条款后接入，安全、权限和写入冲突立即处理。
+- 日常从当前正文读取；只有明确的回归、恢复或争议问题才限定范围查归档和 Git 历史。
 
 ## 维护 _framework/
 
-### 添加新模板
+修改规则：先查正本与调用入口 → 改正文 → 更新受影响模板/入口 → 搜索相反措辞 → 记变更账与证据。
 
-1. 在 `_framework/templates/` 中创建模板文件
-2. 在 `CHANGELOG.md` 中记录：`template-add: <name> — 用途`
+新增规则先排除重复；规范讲动作，历史案例放历史记录。新文件只有确有独立职责才建，不为每个小规则加一层目录。
 
-### 修改现有规则
+### 静态检查清单
 
-1. 在 `FRAMEWORK.md` 或 `MANUAL.md` 中更新
-2. 在 `CHANGELOG.md` 中记录变更内容 + 影响范围
-3. 检查各项目 `meta.yaml` 的 `updated` 字段，判断哪些需要同步
+- 当前入口所指文件存在，关键章节可定位。
+- 正本、入口、可粘贴模板的权限与边界一致。
+- 同一事实没有多个“唯一真源”；当前状态无旧线在岗和已完成待办。
+- 未提交内容得到保护；改动范围明确；`git diff --check` 无错误。
+- 未运行的产品测试明确写“未运行”，静态通过不冒充功能或并发验证。
+- 本库暂无统一检查脚本；改动后逐条解析 Markdown 链接与锚点。
 
-### 提升私有规则
+## 参考、实验与跨库共享
 
-```markdown
-## YYYY-MM-DD — private-promote: <规则名>
+- 参考克隆与上游库只读；来源、版本与许可见实例的参考索引。
+- 可丢弃片段进实例的实验区，不承载第二套实现。
+- 跨库规则共享按需、由用户发起；不把其他库的规则自动套入本库。见[规则同步机制](notes/spec/rule-sync-mechanism.md)。
 
-**来源**: private/ 中的 <文件名>
+## 历史
 
-**提升至**: FRAMEWORK.md §<章节号>
-
-**规则内容**: <简述>
-
-**影响范围**: 新项目自动适用；现有项目可选升级
-```
-
-### 定期检查清单
-
-- [ ] `private/` 中是否有经多次验证可提升的规则？
-- [ ] 模板是否仍然实用？（跑一个学习项目感受一下）
-- [ ] `CHANGELOG.md` 是否最新？
-- [ ] 参考项目的路径（submodule URL）是否仍然有效？
-- [ ] `notes/explore/` 中是否有应纳入规范的改进建议？
-
----
-
-## 跨仓库同步
-
-> 本框架的跨仓库规则同步采用"上游 hub + 本地工作副本"机制：三条同步流（拉取/提升/分发）、冲突处理与 CHANGELOG 记录格式见 `_framework/notes/spec/rule-sync-mechanism.md`。以下为通用复制式同步的保留说明。
-
-### 框架复制
-
-当在新仓库使用本框架时：
-
-1. 复制 `_framework/` 目录（不含 `private/`）
-2. 将 `_framework/private/` 中的通用内容提升到 `FRAMEWORK.md`
-3. 在新仓库创建自己的 `private/learner-profile.md`
-
-### 框架更新回传
-
-当在一个仓库中的框架迭代产生了有价值的更新：
-
-1. 记录在 `CHANGELOG.md`
-2. 手动同步到其他使用本框架的仓库的 `_framework/`
-3. 对比各仓库 `CHANGELOG.md` 确认版本一致性
-
----
-
-## 常见问题
-
-### Q: 三种项目类型的界限模糊了怎么办？
-
-**A:** 
-- 不确定是"分析"还是"重构" → 先建 reference 项目，分析透彻后再转为 reconstruction
-- 不确定是"学习"还是"产出" → 先建 reconstruction 项目，学习完成后再转为 product
-- 不确定是"产品"还是"参考" → 先建 product 项目，需要深入理解其中模块时局部退为 reconstruction（自举模式）
-
-### Q: 一个复制项目能参考多个参考项目吗？
-
-**A:** 可以。在 `meta.yaml` 的 `refs` 中列出所有参考项目。但通常有 1 个"主要参考"，避免注意力分散。
-
-### Q: 笔记写到一半发现轮次划分不合理怎么重构？
-
-**A:** 轮次独立设计就是为了这个场景。直接创建新轮次，把旧轮次的内容迁移过去，然后删除旧轮次目录。不影响其他轮次。
-
-### Q: experiments/outputs/ 被 gitignored 了，想保留某个关键结果怎么办？
-
-**A:** 把关键结果（如 loss curve 图、metrics 表格、关键输出截图）贴到 `notes.md` 中。原始日志和模型权重放在 `outputs/` 中 gitignored。
-
-### Q: 环境配置应该在项目内还是 envs/ 中？
-
-**A:** 
-- 项目特有的依赖 → 项目 README.md 中说明
-- 可复用的环境脚本和模板 → `envs/`
-- 跨项目共享的依赖声明 → `envs/requirements-*.txt` 或 `envs/<build-templates>/`
-- 原则：能复用则放 `envs/`，仅本项目使用则放项目内
-
-### Q: 远程运行时如何组织代码和配置？
-
-**A:**
-1. 环境配置（requirements.txt、环境变量模板）放在 `envs/`
-2. 笔记中标注硬件需求（GPU / 内存 / OS）
-3. 在实验的 `notes.md` 中写清楚远程运行的步骤
-4. 运行产物可以留在远程机器，关键结果贴回笔记中
-
-### Q: 框架的 CLAUDE.md 模板和本仓库的实际 CLAUDE.md 是什么关系？
-
-**A:**
-- `_framework/templates/CLAUDE.md` 是**模板**——给新仓库复制后填写
-- 本仓库根目录的 `CLAUDE.md` 是**实例**——本仓库实际使用的冷启动文件
-- 新仓库应该：复制模板到根目录 → 填写仓库的具体内容 → 随仓库演进持续维护
+v2.0 学习框架与退役规范见 [`archived/`](../archived/README.md)；历史命令不是待执行单，默认不执行。
